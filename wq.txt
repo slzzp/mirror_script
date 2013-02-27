@@ -1,0 +1,22 @@
+NAME
+        wq.sh - get a single file by "wget -nv" basically.
+
+SYNOPSIS
+        wq.sh [URL1] [URL2] ...
+        or put `alias wq '~/work/mirror_script/wq.sh '` in ~/.cshrc and execute wq [URL1] [URL2] ...
+
+DESCRIPTION
+        If the URL matched a pattern(checking hostname, filename, ...etc), wq.sh will do some extra processes.
+
+PATTERN
+        Tumblr image
+
+        url for example: http://24.media.tumblr.com/tumblr_lp2h0dKA8s1qzn3jqo1_500.jpg
+        will try get these urls:
+                http://24.media.tumblr.com/tumblr_lp2h0dKA8s1qzn3jqo1_1280.jpg -> get it!
+                http://24.media.tumblr.com/tumblr_lp2h0dKA8s1qzn3jqo1_1024.jpg -> skip
+                http://24.media.tumblr.com/tumblr_lp2h0dKA8s1qzn3jqo1_800.jpg  -> skip
+                http://24.media.tumblr.com/tumblr_lp2h0dKA8s1qzn3jqo1_600.jpg  -> skip
+
+REQUIREMENT
+        Install wget first.
