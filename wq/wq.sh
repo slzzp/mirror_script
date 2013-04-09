@@ -19,6 +19,9 @@ WGET="/usr/bin/wget"
 # --no-check-certificate: do not check ssl/cert for https:// url
 WGETOPTION="-nv -4 --no-check-certificate"
 
+# referer default none
+WGETREFERER=""
+
 while [ ! -z "$1" ]; do
     # avoid double-typed command
     if [ "wq" == "$1" -o "wq.sh" == "$1" -o "$0" == "$1" ]; then
@@ -26,8 +29,17 @@ while [ ! -z "$1" ]; do
         continue
     fi
 
+    # check referer
+    CHECKREFERER=`echo "$1" | ${CUT} -c 1-10`
+    if [ "--referer=" = "${CHECKREFERER}" ]; then
+        WGETREFERER="$1"
+        shift
+        continue
+    fi
+
+
     # get file first
-    ${WGET} ${WGETOPTION} "$1"
+    ${WGET} ${WGETOPTION} ${WGETREFERER} "$1"
 
     # pattern: tumblr image
     # url pattern:
@@ -70,7 +82,7 @@ while [ ! -z "$1" ]; do
             URL=`echo -n "http://${HOSTNAME}/${PATH}${FILENAMEBODY}_${SIZE}.${FILENAMEEXT}"`
             LOCALFILENAME=`echo -n "${FILENAMEBODY}_${SIZE}.${FILENAMEEXT}"`
 
-            ${WGET} ${WGETOPTION} "${URL}"
+            ${WGET} ${WGETOPTION} ${WGETREFERER} "${URL}"
 
             # if get a file, skip smaller size
             if [ -f "${LOCALFILENAME}" ]; then
