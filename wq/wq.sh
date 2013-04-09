@@ -14,6 +14,11 @@ TR="/usr/bin/tr"
 WC="/usr/bin/wc"
 WGET="/usr/bin/wget"
 
+# -nv: basic option for simple message
+# -4: some site has ipv6 address, but no route of ipv6, so force using ipv4 only
+# --no-check-certificate: do not check ssl/cert for https:// url
+WGETOPTION="-nv -4 --no-check-certificate"
+
 while [ ! -z "$1" ]; do
     # avoid double-typed command
     if [ "wq" == "$1" -o "wq.sh" == "$1" -o "$0" == "$1" ]; then
@@ -21,9 +26,8 @@ while [ ! -z "$1" ]; do
         continue
     fi
 
-    # -4: some site has ipv6 address, but no route of ipv6, so force using ipv4 only
-    # --no-check-certificate: do not check ssl/cert for https:// url
-    ${WGET} -nv -4 --no-check-certificate "$1"
+    # get file first
+    ${WGET} ${WGETOPTION} "$1"
 
     # pattern: tumblr image
     # url pattern:
@@ -66,7 +70,7 @@ while [ ! -z "$1" ]; do
             URL=`echo -n "http://${HOSTNAME}/${PATH}${FILENAMEBODY}_${SIZE}.${FILENAMEEXT}"`
             LOCALFILENAME=`echo -n "${FILENAMEBODY}_${SIZE}.${FILENAMEEXT}"`
 
-            ${WGET} -4 -nv --no-check-certificate "${URL}"
+            ${WGET} ${WGETOPTION} "${URL}"
 
             # if get a file, skip smaller size
             if [ -f "${LOCALFILENAME}" ]; then
