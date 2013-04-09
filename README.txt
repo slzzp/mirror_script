@@ -1,10 +1,13 @@
 Here are some web page(s)/file(s) mirror/get scripts.
 
-REQUIREMENT:
+REQUIREMENT
 - Install wget first.
 
-NOTICE:
-- My develop platform is debian "squeeze", use general /bin/sh and unix tools.
+DESCRIPTION
+- wq: please read wq/wq.txt
+
+NOTICE
+- My develop platform is Debian Linux "squeeze", use general /bin/sh and unix tools.
 - Remember to check the script then fix external commands' path or filename.
 - I use csh/tcsh as my shell, if you're not, please fix something or somewhere about it.
 - I put this repository at ~/work/mirror_script , if you're not, please fix something or somewhere about it.
