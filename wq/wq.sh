@@ -37,9 +37,16 @@ while [ ! -z "$1" ]; do
         continue
     fi
 
+    URL=`echo -n "$1"`
+
+    # check if $1's prefix is '//'
+    CHECKSLASHSLASH=`echo "$1" | ${CUT} -c 1-2`
+    if [ "//" = "${CHECKSLASHSLASH}" ]; then
+        URL=`echo -n "http:$1"`
+    fi
 
     # get file first
-    ${WGET} ${WGETOPTION} ${WGETREFERER} "$1"
+    ${WGET} ${WGETOPTION} ${WGETREFERER} "${URL}"
 
     # pattern: tumblr image
     # url pattern:
