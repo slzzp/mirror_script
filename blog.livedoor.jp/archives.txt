@@ -1,0 +1,15 @@
+NAME
+        archives.sh - get content image files of http://blog.livedoor.jp/
+
+SYNOPSIS
+        archives.sh [URL1] [URL2] ...
+        url for example: archives.sh http://blog.livedoor.jp/adult_pics/archives/3368649.html
+
+DESCRIPTION
+        archives.sh gets image files without ad/thumb of http://blog.livedoor.jp/ html page.
+
+        if url is http://blog.livedoor.jp/adult_pics/archives/3368649.html
+        images stored at: ~/tmp/blog.livedoor.jp/adult_pics/3368649/
+
+REQUIREMENT
+        Install wget first.

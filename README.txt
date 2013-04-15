@@ -5,6 +5,7 @@ REQUIREMENT
 
 DESCRIPTION
 - wq: please read wq/wq.txt
+- blog.livedoor.jp: please read blog.livedoor.jp/archives.txt
 
 NOTICE
 - My develop platform is Debian Linux "squeeze", use general /bin/sh and unix tools.
