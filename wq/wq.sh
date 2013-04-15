@@ -19,6 +19,9 @@ WGET="/usr/bin/wget"
 # --no-check-certificate: do not check ssl/cert for https:// url
 WGETOPTION="-nv -4 --no-check-certificate"
 
+# WGETUSERAGENT="Wget/1.12"  # default
+WGETUSERAGENT="Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-TW; rv:1.9.2.24) Gecko/20111103 Firefox/3.6.24 (.NET CLR 3.5.30729)"  # pretend windows browsers
+
 # referer default none
 WGETREFERER=""
 
@@ -46,7 +49,7 @@ while [ ! -z "$1" ]; do
     fi
 
     # get file first
-    ${WGET} ${WGETOPTION} ${WGETREFERER} "${URL}"
+    ${WGET} ${WGETOPTION} --user-agent="${WGETUSERAGENT}" ${WGETREFERER} "${URL}"
 
     # pattern: tumblr image
     # url pattern:
@@ -89,7 +92,7 @@ while [ ! -z "$1" ]; do
             URL=`echo -n "http://${HOSTNAME}/${PATH}${FILENAMEBODY}_${SIZE}.${FILENAMEEXT}"`
             LOCALFILENAME=`echo -n "${FILENAMEBODY}_${SIZE}.${FILENAMEEXT}"`
 
-            ${WGET} ${WGETOPTION} ${WGETREFERER} "${URL}"
+            ${WGET} ${WGETOPTION} --user-agent="${WGETUSERAGENT}" ${WGETREFERER} "${URL}"
 
             # if get a file, skip smaller size
             if [ -f "${LOCALFILENAME}" ]; then
