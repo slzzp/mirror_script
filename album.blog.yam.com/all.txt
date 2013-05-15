@@ -1,0 +1,38 @@
+NAME
+        user.sh   - get all pictures from user
+        album.sh  - get all pictures from user's album
+        folder.sh - get all pictures from user's album's folder
+        page.sh   - get picture from user's album's folder's page
+
+SYNOPSIS
+        user.sh [URL1] [URL2] ...
+        url for example: user.sh http://album.blog.yam.com/death1121
+
+        album.sh [URL1] [URL2] ...
+        url for example: album.sh http://album.blog.yam.com/album.php?userid=death1121&page=1
+
+        folder.sh [URL1] [URL2] ...
+        url for example: folder.sh http://album.blog.yam.com/death1121&folder=9939631
+
+        page.sh [URL1] [URL2] ...
+        url for example: page.sh http://album.blog.yam.com/show.php?a=death1121&f=9939631&i=24590367&p=160
+
+DESCRIPTION
+        The yam album structure is user=album->folder->page now, each script process its html page content.
+
+        Each script gets image files without ad/thumb of http://album.blog.yam.com/ html page.
+
+        if url is http://album.blog.yam.com/death1121 for user.sh
+        images stored at: ~/tmp/album.blog.yam.com/death1121/
+
+        if url is http://album.blog.yam.com/album.php?userid=death1121&page=1 for album.sh
+        images stored at: ~/tmp/album.blog.yam.com/death1121/
+
+        if url is http://album.blog.yam.com/death1121&folder=9939631 for folder.sh
+        images stored at: ~/tmp/album.blog.yam.com/death1121/9939631/
+
+        if url is http://album.blog.yam.com/show.php?a=death1121&f=9939631&i=24590367&p=160 for page.sh
+        images stored at: ~/tmp/album.blog.yam.com/death1121/9939631/
+
+REQUIREMENT
+        Install wget first.
