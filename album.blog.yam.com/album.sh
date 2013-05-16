@@ -78,7 +78,7 @@ while [ ! -z "$1" ]; do
         exit
     fi
 
-    FILENAME="album_${PAGEAT}.html"
+    FILENAME="album_${PAGEAT}_$$.html"
 
 
     cd ~/tmp/

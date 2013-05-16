@@ -85,7 +85,7 @@ while [ ! -z "$1" ]; do
         exit
     fi
 
-    FILENAME="folder_${FOLDERID}_${PAGEAT}.html"
+    FILENAME="folder_${FOLDERID}_${PAGEAT}_$$.html"
 
 
     cd ~/tmp/

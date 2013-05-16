@@ -62,7 +62,7 @@ while [ ! -z "$1" ]; do
         exit
     fi
 
-    FILENAME="user.html"
+    FILENAME="user_$$.html"
 
 
     cd ~/tmp/
