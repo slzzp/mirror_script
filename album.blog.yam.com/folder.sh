@@ -125,9 +125,11 @@ while [ ! -z "$1" ]; do
     fi
 
 
-    if [ -z "${PAGEAT}" ]; then
+    # check pager
+    TMPLINE=`${CAT} _${FILENAME} | ${GREP} '最後一頁' | ${HEAD} -n 1`
+
+    if [ -z "${PAGEAT}" -a -n "${TMPLINE}" ]; then
         # process pager
-        TMPLINE=`${CAT} _${FILENAME} | ${GREP} '最後一頁' | ${HEAD} -n 1`
         PAGEMAX=""
         PAGELIMIT=""
 

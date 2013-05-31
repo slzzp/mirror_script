@@ -106,19 +106,22 @@ while [ ! -z "$1" ]; do
     TMPLINE=`${CAT} _${FILENAME} | ${GREP} '最後一頁' | ${HEAD} -n 1`
     PAGEMAX=""
     PAGELIMIT=""
-    for ARGNAMEVALUE in `echo "${TMPLINE}" | ${TR} '&"' '  '`; do
-        ARGNAME=`echo "${ARGNAMEVALUE}" | ${AWK} -F= '{printf("%s",$1);}'`
-        ARGVALUE=`echo "${ARGNAMEVALUE}" | ${AWK} -F= '{printf("%s",$2);}'`
-        # echo "arg name/value: ${ARGNAME} ${ARGVALUE}"
 
-        if [ "page" == "${ARGNAME}" ]; then
-            PAGEMAX="${ARGVALUE}"
-        fi
+    if [ -n "${TMPLINE}" ]; then
+        for ARGNAMEVALUE in `echo "${TMPLINE}" | ${TR} '&"' '  '`; do
+            ARGNAME=`echo "${ARGNAMEVALUE}" | ${AWK} -F= '{printf("%s",$1);}'`
+            ARGVALUE=`echo "${ARGNAMEVALUE}" | ${AWK} -F= '{printf("%s",$2);}'`
+            # echo "arg name/value: ${ARGNAME} ${ARGVALUE}"
 
-        if [ "limit" == "${ARGNAME}" ]; then
-            PAGELIMIT="${ARGVALUE}"
-        fi
-    done
+            if [ "page" == "${ARGNAME}" ]; then
+                PAGEMAX="${ARGVALUE}"
+            fi
+
+            if [ "limit" == "${ARGNAME}" ]; then
+                PAGELIMIT="${ARGVALUE}"
+            fi
+        done
+    fi
 
     if [ ! -z "${PAGEMAX}" ]; then
         # user album has many pages
