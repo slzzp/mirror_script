@@ -96,6 +96,20 @@ while [ ! -z "$1" ]; do
         fi
     fi
 
+    if [ 'blog.livedoor.jp' == "${HOSTNAME}" ]; then
+        # http://blog.livedoor.jp/pinkelech/archives/25313738.html
+        if [ 'archives' == "${PATHB}" ]; then
+            if [ -f ~/work/mirror_script/blog.livedoor.jp/archives.sh ]; then
+                ~/work/mirror_script/blog.livedoor.jp/archives.sh ${URL}
+                shift
+                continue
+            else
+                echo 'error: lost script: ~/work/mirror_script/blog.livedoor.jp/archives.sh'
+                exit
+            fi
+        fi
+    fi
+
     echo "error: unknown url: ${URL}"
     exit
 done

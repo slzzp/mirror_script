@@ -16,5 +16,10 @@ PATTERN
         folder webpage url for example: http://album.blog.yam.com/death1121&folder=9939631
         pic webpage url for example:    http://album.blog.yam.com/show.php?a=death1121&f=9939631&i=24590367&p=160
 
+        --
+        Livedoor Blog
+
+        article webpage url for example: http://blog.livedoor.jp/pinkelech/archives/25313738.html
+
 REQUIREMENT
         Install wget first.
