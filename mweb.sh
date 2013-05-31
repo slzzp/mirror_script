@@ -42,6 +42,60 @@ while [ ! -z "$1" ]; do
 
     # check url    
 
+    if [ 'album.blog.yam.com' == "${HOSTNAME}" ]; then
+        # http://album.blog.yam.com/death1121
+        HASAND=`echo "${PATHA}" | ${GREP} -- '&' | ${WC} -l | ${TR} -d ' '`
+        if [ ${HASAND} -eq 0 ]; then
+            if [ -f ~/work/mirror_script/album.blog.yam.com/user.sh ]; then
+                ~/work/mirror_script/album.blog.yam.com/user.sh ${URL}
+                shift
+                continue
+            else
+                echo 'error: lost script: ~/work/mirror_script/album.blog.yam.com/user.sh'
+                exit
+            fi
+        fi
+
+        # http://album.blog.yam.com/album.php?userid=death1121&page=1&limit=12
+        HASUSERID=`echo "${PATHA}" | ${GREP} -- '?userid=' | ${WC} -l | ${TR} -d ' '`
+        if [ ${HASUSERID} -gt 0 ]; then
+            if [ -f ~/work/mirror_script/album.blog.yam.com/album.sh ]; then
+                ~/work/mirror_script/album.blog.yam.com/album.sh ${URL}
+                shift
+                continue
+            else
+                echo 'error: lost script: ~/work/mirror_script/album.blog.yam.com/album.sh'
+                exit
+            fi
+        fi
+
+        # http://album.blog.yam.com/death1121&folder=9939631
+        HASFOLDER=`echo "${PATHA}" | ${GREP} -- '&folder=' | ${WC} -l | ${TR} -d ' '`
+        if [ ${HASFOLDER} -gt 0 ]; then
+            if [ -f ~/work/mirror_script/album.blog.yam.com/folder.sh ]; then
+                ~/work/mirror_script/album.blog.yam.com/folder.sh ${URL}
+                shift
+                continue
+            else
+                echo 'error: lost script: ~/work/mirror_script/album.blog.yam.com/folder.sh'
+                exit
+            fi
+        fi
+
+        # http://album.blog.yam.com/show.php?a=death1121&f=9939631&i=24590367&p=160
+        HASSHOW=`echo "${PATHA}" | ${GREP} -- '/show.php?' | ${WC} -l | ${TR} -d ' '`
+        if [ ${HASSHOW} -gt 0 ]; then
+            if [ -f ~/work/mirror_script/album.blog.yam.com/page.sh ]; then
+                ~/work/mirror_script/album.blog.yam.com/page.sh ${URL}
+                shift
+                continue
+            else
+                echo 'error: lost script: ~/work/mirror_script/album.blog.yam.com/page.sh'
+                exit
+            fi
+        fi
+    fi
+
     echo "error: unknown url: ${URL}"
     exit
 done

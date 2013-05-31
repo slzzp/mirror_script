@@ -9,7 +9,12 @@ DESCRIPTION
         If the URL matched a pattern(checking hostname, path, filename, argument, ...etc), mweb.sh will call its script.
 
 PATTERN
-        T.B.D.
+        Yam Album
+
+        user webpage url for example:   http://album.blog.yam.com/death1121
+        album webpage url for example:  http://album.blog.yam.com/album.php?userid=death1121&page=1&limit=12
+        folder webpage url for example: http://album.blog.yam.com/death1121&folder=9939631
+        pic webpage url for example:    http://album.blog.yam.com/show.php?a=death1121&f=9939631&i=24590367&p=160
 
 REQUIREMENT
         Install wget first.
