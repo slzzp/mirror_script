@@ -4,6 +4,7 @@ REQUIREMENT
 - Install wget first.
 
 DESCRIPTION
+- mweb.sh: please read mweb.txt
 - wq: please read wq/wq.txt
 - blog.livedoor.jp: please read blog.livedoor.jp/archives.txt
 

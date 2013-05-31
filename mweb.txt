@@ -1,0 +1,15 @@
+NAME
+        mweb.sh - multiple scripts caller of mirroring webpage pictures.
+
+SYNOPSIS
+        mweb.sh [URL1] [URL2] ...
+        or put `alias mweb '~/work/mirror_script/mweb.sh '` in ~/.cshrc and execute mweb [URL1] [URL2] ...
+
+DESCRIPTION
+        If the URL matched a pattern(checking hostname, path, filename, argument, ...etc), mweb.sh will call its script.
+
+PATTERN
+        T.B.D.
+
+REQUIREMENT
+        Install wget first.
