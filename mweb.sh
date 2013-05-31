@@ -110,6 +110,21 @@ while [ ! -z "$1" ]; do
         fi
     fi
 
+    if [ 'fc2' == "${HOSTNAMEC}" -a 'com' == "${HOSTNAMED}" ]; then
+        # http://sanzierogazo.blog129.fc2.com/blog-entry-2564.html
+        HOSTNAMEBB=`echo "${HOSTNAMEB}" | ${CUT} -c 1-4`
+        if [ 'blog' == "${HOSTNAMEBB}" ]; then
+            if [ -f ~/work/mirror_script/blog.fc2.com/blog_entry.sh ]; then
+                ~/work/mirror_script/blog.fc2.com/blog_entry.sh ${URL}
+                shift
+                continue
+            else
+                echo 'error: lost script: ~/work/mirror_script/blog.fc2.com/blog_entry.sh'
+                exit
+            fi
+        fi
+    fi
+
     echo "error: unknown url: ${URL}"
     exit
 done

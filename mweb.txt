@@ -20,5 +20,9 @@ PATTERN
 
         url for example: article    = http://blog.livedoor.jp/pinkelech/archives/25313738.html
 
+        FC2 Blog
+
+        url for example: article    = http://sanzierogazo.blog129.fc2.com/blog-entry-2564.html
+
 REQUIREMENT
         Install wget first.
