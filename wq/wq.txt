@@ -18,5 +18,10 @@ PATTERN
                 http://24.media.tumblr.com/tumblr_lp2h0dKA8s1qzn3jqo1_800.jpg  -> skip
                 http://24.media.tumblr.com/tumblr_lp2h0dKA8s1qzn3jqo1_600.jpg  -> skip
 
+        Pixiv image
+
+        url for example: http://i2.pixiv.net/img20/img/stargeyser/10931186.jpg?1277014586
+        will fake refererer: http://www.pixiv.net/member_illust.php?mode=big&illust_id=10931186
+
 REQUIREMENT
         Install wget first.
