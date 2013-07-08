@@ -1,5 +1,6 @@
 NAME
-        archives.sh - get content image files of http://blog.livedoor.jp/
+        archives.sh - caller of archives_USERNAME.sh
+        archives_USERNAME.sh - get content image files of http://blog.livedoor.jp/USERNAME/
 
 SYNOPSIS
         archives.sh [URL1] [URL2] ...
