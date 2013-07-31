@@ -29,7 +29,7 @@ WGETREFERER=""
 
 while [ ! -z "$1" ]; do
     # avoid double-typed command
-    if [ "$0" == "$1" ]; then
+    if [ "$0" = "$1" ]; then
         shift
         continue
     fi
@@ -61,15 +61,15 @@ while [ ! -z "$1" ]; do
         ARGVALUE=`echo "${ARGNAMEVALUE}" | ${AWK} -F= '{printf("%s",$2);}'`
         # echo "arg name/value: ${ARGNAME} ${ARGVALUE}"
 
-        if [ "a" == "${ARGNAME}" ]; then
+        if [ "a" = "${ARGNAME}" ]; then
             USERNAME="${ARGVALUE}";
         fi
 
-        if [ "f" == "${ARGNAME}" ]; then
+        if [ "f" = "${ARGNAME}" ]; then
             FOLDERID="${ARGVALUE}";
         fi
 
-        if [ "p" == "${ARGNAME}" ]; then
+        if [ "p" = "${ARGNAME}" ]; then
             PAGEAT="${ARGVALUE}";
         fi
     done

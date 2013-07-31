@@ -16,7 +16,7 @@ WC="/usr/bin/wc"
 
 while [ ! -z "$1" ]; do
     # avoid double-typed command
-    if [ "$0" == "$1" ]; then
+    if [ "$0" = "$1" ]; then
         shift
         continue
     fi
@@ -42,7 +42,7 @@ while [ ! -z "$1" ]; do
 
     # check url    
 
-    if [ 'album.blog.yam.com' == "${HOSTNAME}" ]; then
+    if [ 'album.blog.yam.com' = "${HOSTNAME}" ]; then
         # http://album.blog.yam.com/death1121
         HASAND=`echo "${PATHA}" | ${GREP} -- '&' | ${WC} -l | ${TR} -d ' '`
         if [ ${HASAND} -eq 0 ]; then
@@ -96,9 +96,9 @@ while [ ! -z "$1" ]; do
         fi
     fi
 
-    if [ 'blog.livedoor.jp' == "${HOSTNAME}" ]; then
+    if [ 'blog.livedoor.jp' = "${HOSTNAME}" ]; then
         # http://blog.livedoor.jp/pinkelech/archives/25313738.html
-        if [ 'archives' == "${PATHB}" ]; then
+        if [ 'archives' = "${PATHB}" ]; then
             if [ -f ~/work/mirror_script/blog.livedoor.jp/archives.sh ]; then
                 ~/work/mirror_script/blog.livedoor.jp/archives.sh ${URL}
                 shift
@@ -110,10 +110,10 @@ while [ ! -z "$1" ]; do
         fi
     fi
 
-    if [ 'fc2' == "${HOSTNAMEC}" -a 'com' == "${HOSTNAMED}" ]; then
+    if [ 'fc2' = "${HOSTNAMEC}" -a 'com' = "${HOSTNAMED}" ]; then
         # http://sanzierogazo.blog129.fc2.com/blog-entry-2564.html
         HOSTNAMEBB=`echo "${HOSTNAMEB}" | ${CUT} -c 1-4`
-        if [ 'blog' == "${HOSTNAMEBB}" ]; then
+        if [ 'blog' = "${HOSTNAMEBB}" ]; then
             if [ -f ~/work/mirror_script/blog.fc2.com/blog_entry.sh ]; then
                 ~/work/mirror_script/blog.fc2.com/blog_entry.sh ${URL}
                 shift

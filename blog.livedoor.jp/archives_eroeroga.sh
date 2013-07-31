@@ -30,7 +30,7 @@ MYNAME='eroeroga'
 
 while [ ! -z "$1" ]; do
     # avoid double-typed command
-    if [ "$0" == "$1" ]; then
+    if [ "$0" = "$1" ]; then
         shift
         continue
     fi

@@ -33,7 +33,7 @@ while [ ! -z "$1" ]; do
     CLEANREFERER=0
 
     # avoid double-typed command
-    if [ "wq" == "$1" -o "wq.sh" == "$1" -o "$0" == "$1" ]; then
+    if [ "wq" = "$1" -o "wq.sh" = "$1" -o "$0" = "$1" ]; then
         shift
         continue
     fi
@@ -69,7 +69,7 @@ while [ ! -z "$1" ]; do
     #   url: http://i2.pixiv.net/img20/img/stargeyser/10931186.jpg?1277014586
     #   ref: http://www.pixiv.net/member_illust.php?mode=big&illust_id=10931186
 
-    if [ 'pixiv' == "${HOSTNAMEB}" -a 'net' == "${HOSTNAMEC}" ]; then
+    if [ 'pixiv' = "${HOSTNAMEB}" -a 'net' = "${HOSTNAMEC}" ]; then
         FILENAME=`echo "${PATHD}" | ${AWK} -F? '{printf("%s",$1);}'`
         FILEID=`echo "${FILENAME}" | ${AWK} -F. '{printf("%d",$1);}'`
         ARGS=`echo "${PATHD}" | ${AWK} -F? '{printf("%s",$2);}'`
