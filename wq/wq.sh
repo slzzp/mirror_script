@@ -46,6 +46,20 @@ while [ ! -z "$1" ]; do
         continue
     fi
 
+    # TODO: imgur.com
+    # if url: http://imgur.com/Hwrk1Vl
+    # get pic: http://i.imgur.com/Hwrk1Vl.jpg
+    # check jpg from http://imgur.com/Hwrk1Vl content ?
+
+    # TODO: ppt.cc
+    # if url: http://ppt.cc/4Uu-
+    # get pic: http://http://ppt.cc/4Uu-@.jpg (maybe [jJ][Pp][Gg] [Gg][Ii][Ff] [Pp][Nn][Gg])
+    # check jpg from http://ppt.cc/4Uu- content ?
+
+    # TODO: ppt.cc
+    # if url: http://ppt.cc/4Uu-@.jpg without referer
+    # auto set referer to http://ppt.cc/4Uu-
+
     URL=`echo -n "$1"`
 
     # check if $1's prefix is '//'
@@ -85,6 +99,13 @@ while [ ! -z "$1" ]; do
 
     # get file first
     ${WGET} ${WGETOPTION} --user-agent="${WGETUSERAGENT}" ${WGETREFERER} "${URL}"
+
+    # TODO:
+    # pattern: facebook image
+    # url pattern:
+    #  1. http://sphotos-e.ak.fbcdn.net/hphotos-ak-prn1/579545_10151765622017074_220805590_n.jpg
+    # if get _n.jpg , try get _o.jpg;
+    # if got _o.jpg and md5sum of _n.jpg == md5sum of _o.jpg, remove _o.jpg, or reserve both _n.jpg and _o.jpg
 
     # pattern: tumblr image
     # url pattern:
