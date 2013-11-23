@@ -1,0 +1,14 @@
+NAME
+        rmdotdup.sh - clean duplicate wget output files.
+
+SYNOPSIS
+        cd [path_where_is_your_file_storage], then run rmdotdup.sh
+
+DESCRIPTION
+        When you run wget http://hostname/path/FILENAME , you get one file named FILENAME .
+        If you run again, you get one file named FILENAME.1 .
+        If you run again, you get one file named FILENAME.2 .
+        ....
+
+        rmdotdup.sh compares the content of FILENAME and FILENAME.N (N is 1 to 9),
+        and remove file FILENAME.N within the same content.
