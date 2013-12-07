@@ -23,9 +23,8 @@ do
 
             if [ "${MD5A}" = "${MD5B}" ]; then
                 echo "rm $f"
-                # ${RM} $f
+                ${RM} $f
             fi
         done
     fi
 done
-
