@@ -39,7 +39,7 @@ while [ ! -z "$1" ]; do
     CLEANREFERER=0
 
     # avoid double-typed command
-    if [ "wq" = "$1" -o "wq.sh" = "$1" -o "$0" = "$1" ]; then
+    if [ "wm" = "$1" -o "wm.sh" = "$1" -o "$0" = "$1" ]; then
         shift
         continue
     fi
