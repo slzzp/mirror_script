@@ -19,11 +19,11 @@ do
             FILENAME=`${BASENAME} $f .$i`
 
             if [ ! -f "$f" ]; then
-                break
+                continue
             fi
 
             if [ ! -f "${FILENAME}" ]; then
-                break
+                continue
             fi
 
             MD5A=`${MD5} $f | ${CUT} -c 1-32`
