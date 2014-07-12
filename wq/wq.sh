@@ -8,6 +8,7 @@ fi
 
 # external commands
 AWK="/usr/bin/awk"
+BASENAME="/usr/bin/basename"
 CUT="/usr/bin/cut"
 EXPR="/usr/bin/expr"
 GREP="/bin/grep"
@@ -93,6 +94,29 @@ while [ ! -z "$1" ]; do
     # TODO: ppt.cc
     # if url: http://ppt.cc/4Uu-@.jpg without referer
     # auto set referer to http://ppt.cc/4Uu-
+
+    # facebook oh/oe pic
+    # if url: https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-xpf1/v/t1.0-9/10489954_760151634035462_3295158177063468216_n.jpg?oh=9d34618b6532a1451cf7816ad38811bd&oe=54599FA2&__gda__=1413965256_cd34923b97f4eb4ad7bb4f1394f9efdb
+    # save file into 10489954_760151634035462_3295158177063468216_n.jpg or 10489954_760151634035462_3295158177063468216_n.jpg.N
+    CHECKQOH=`echo "$1" | ${GREP} '?oh=' | ${WC} -l | ${TR} -d ' '`
+    if [ ${CHECKQOH} -gt 0 ]; then
+        URL=`echo "$1" | ${AWK} -F\? '{printf("%s",$1);}'`
+        BASEFILENAME=`${BASENAME} "${URL}"`
+
+        CHECKCOUNT=1
+        CHECKOUTFILE=`echo -n "${BASEFILENAME}"`
+        while [ ! -z "${CHECKOUTFILE}" ]; do
+            if [ ! -f "${CHECKOUTFILE}" ]; then
+                break
+            fi
+
+            CHECKOUTFILE=`echo -n "${BASEFILENAME}.${CHECKCOUNT}"`
+            CHECKCOUNT=`${EXPR} ${CHECKCOUNT} + 1`
+        done
+
+        WGETOUTFILE="-O ${CHECKOUTFILE}"
+        CLEANOUTFILE=1
+    fi
 
     URL=`echo -n "$1"`
 
