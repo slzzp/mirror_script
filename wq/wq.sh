@@ -9,6 +9,7 @@ fi
 # external commands
 AWK="/usr/bin/awk"
 CUT="/usr/bin/cut"
+EXPR="/usr/bin/expr"
 GREP="/bin/grep"
 TR="/usr/bin/tr"
 WC="/usr/bin/wc"
@@ -25,12 +26,21 @@ WGETUSERAGENT="Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-TW; rv:1.9.2.24) Geck
 # referer default none
 CLEANREFERER=1
 
+# outfile default none
+CLEANOUTFILE=1
+
 while [ ! -z "$1" ]; do
     if [ ${CLEANREFERER} -gt 0 ]; then
         WGETREFERER=""
     fi
 
     CLEANREFERER=0
+
+    if [ ${CLEANOUTFILE} -gt 0 ]; then
+        WGETOUTFILE=""
+    fi
+
+    CLEANOUTFILE=0
 
     # avoid double-typed command
     if [ "wq" = "$1" -o "wq.sh" = "$1" -o "$0" = "$1" ]; then
@@ -42,6 +52,30 @@ while [ ! -z "$1" ]; do
     CHECKREFERER=`echo "$1" | ${CUT} -c 1-10`
     if [ "--referer=" = "${CHECKREFERER}" ]; then
         WGETREFERER="$1"
+        shift
+        continue
+    fi
+
+    # check outfile
+    if [ "-O" = "$1" ]; then
+        if [ -z "$2" ]; then
+            exit
+        fi
+
+        CHECKCOUNT=1
+        CHECKOUTFILE=`echo -n "$2"`
+        while [ ! -z "${CHECKOUTFILE}" ]; do
+            if [ ! -f "${CHECKOUTFILE}" ]; then
+                break
+            fi
+
+            CHECKOUTFILE=`echo -n "$2.${CHECKCOUNT}"`
+            CHECKCOUNT=`${EXPR} ${CHECKCOUNT} + 1`
+        done
+
+        WGETOUTFILE="-O ${CHECKOUTFILE}"
+        CLEANOUTFILE=1
+        shift
         shift
         continue
     fi
@@ -98,7 +132,7 @@ while [ ! -z "$1" ]; do
     fi
 
     # get file first
-    ${WGET} ${WGETOPTION} --user-agent="${WGETUSERAGENT}" ${WGETREFERER} "${URL}"
+    ${WGET} ${WGETOUTFILE} ${WGETOPTION} --user-agent="${WGETUSERAGENT}" ${WGETREFERER} "${URL}"
 
     # TODO:
     # pattern: facebook image
@@ -148,7 +182,7 @@ while [ ! -z "$1" ]; do
             URL=`echo -n "http://${HOSTNAME}/${PATH}${FILENAMEBODY}_${SIZE}.${FILENAMEEXT}"`
             LOCALFILENAME=`echo -n "${FILENAMEBODY}_${SIZE}.${FILENAMEEXT}"`
 
-            ${WGET} ${WGETOPTION} --user-agent="${WGETUSERAGENT}" ${WGETREFERER} "${URL}"
+            ${WGET} ${WGETOUTFILE} ${WGETOPTION} --user-agent="${WGETUSERAGENT}" ${WGETREFERER} "${URL}"
 
             # if get a file, skip smaller size
             if [ -f "${LOCALFILENAME}" ]; then
