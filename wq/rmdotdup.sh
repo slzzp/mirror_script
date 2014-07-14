@@ -14,11 +14,11 @@ for i in 9 8 7 6 5 4 3 2 1
 do
     FILECOUNT=`${LS} *.$i | ${WC} -l | ${TR} -d ' '`
     if [ ${FILECOUNT} -gt 0 ]; then
-        for f in `${LS} *.$i`
+        for F in `${LS} *.$i`
         do
-            FILENAME=`${BASENAME} $f .$i`
+            FILENAME=`${BASENAME} ${F} .$i`
 
-            if [ ! -f "$f" ]; then
+            if [ ! -f "${F}" ]; then
                 continue
             fi
 
@@ -26,12 +26,15 @@ do
                 continue
             fi
 
-            MD5A=`${MD5} $f | ${CUT} -c 1-32`
+            MD5A=`${MD5} ${F} | ${CUT} -c 1-32`
             MD5B=`${MD5} ${FILENAME} | ${CUT} -c 1-32`
 
             if [ "${MD5A}" = "${MD5B}" ]; then
-                echo "rm $f"
-                ${RM} $f
+                echo "rm ${F}"
+
+                ${RM} "${F}"
+            else
+                echo "keep ${F}"
             fi
         done
     fi
