@@ -118,6 +118,30 @@ while [ ! -z "$1" ]; do
         CLEANOUTFILE=1
     fi
 
+    # facebook dl pic
+    # if url: https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-xpf1/v/t1.0-9/10489954_760151634035462_3295158177063468216_n.jpg?dl=1
+    # save file into 10489954_760151634035462_3295158177063468216_n.jpg or 10489954_760151634035462_3295158177063468216_n.jpg.N
+    CHECKQDL=`echo "$1" | ${GREP} '?dl=' | ${WC} -l | ${TR} -d ' '`
+    if [ ${CHECKQDL} -gt 0 ]; then
+        URL=`echo "$1" | ${AWK} -F\? '{printf("%s",$1);}'`
+        BASEFILENAME=`${BASENAME} "${URL}"`
+
+        CHECKCOUNT=1
+        CHECKOUTFILE=`echo -n "${BASEFILENAME}"`
+        while [ ! -z "${CHECKOUTFILE}" ]; do
+            if [ ! -f "${CHECKOUTFILE}" ]; then
+                break
+            fi
+
+            CHECKOUTFILE=`echo -n "${BASEFILENAME}.${CHECKCOUNT}"`
+            CHECKCOUNT=`${EXPR} ${CHECKCOUNT} + 1`
+        done
+
+        WGETOUTFILE="-O ${CHECKOUTFILE}"
+        CLEANOUTFILE=1
+    fi
+
+
     URL=`echo -n "$1"`
 
     # check if $1's prefix is '//'
