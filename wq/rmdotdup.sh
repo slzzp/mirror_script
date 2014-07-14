@@ -10,13 +10,11 @@ RM="/bin/rm"
 TR="/usr/bin/tr"
 WC="/usr/bin/wc"
 
-for i in 9 8 7 6 5 4 3 2 1
-do
-    FILECOUNT=`${LS} *.$i | ${WC} -l | ${TR} -d ' '`
+for I in 9 8 7 6 5 4 3 2 1; do
+    FILECOUNT=`${LS} *.${I} | ${WC} -l | ${TR} -d ' '`
     if [ ${FILECOUNT} -gt 0 ]; then
-        for F in `${LS} *.$i`
-        do
-            FILENAME=`${BASENAME} ${F} .$i`
+        for F in `${LS} *.${I}`; do
+            FILENAME=`${BASENAME} ${F} .${I}`
 
             if [ ! -f "${F}" ]; then
                 continue
