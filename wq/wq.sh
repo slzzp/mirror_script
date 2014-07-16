@@ -12,6 +12,7 @@ BASENAME="/usr/bin/basename"
 CUT="/usr/bin/cut"
 EXPR="/usr/bin/expr"
 GREP="/bin/grep"
+SED="/bin/sed"
 TR="/usr/bin/tr"
 WC="/usr/bin/wc"
 WGET="/usr/bin/wget"
@@ -149,6 +150,17 @@ while [ ! -z "$1" ]; do
     if [ "//" = "${CHECKSLASHSLASH}" ]; then
         URL=`echo -n "http:$1"`
     fi
+
+    # facebook limited width/height pic
+    # if url: https://fbcdn-sphotos-e-a.akamaihd.net/hphotos-ak-xpa1/t31.0-8/s960x960/10514307_1450320061902023_7392152021835748963_o.jpg
+    #         https://scontent-b-nrt.xx.fbcdn.net/hphotos-xpa1/t1.0-9/p240x240/10313489_415628195241707_2675330737228852867_n.jpg
+    # update url: https://fbcdn-sphotos-e-a.akamaihd.net/hphotos-ak-xpa1/t31.0-8/10514307_1450320061902023_7392152021835748963_o.jpg
+
+    CHECKFBS=`echo "${URL}" | ${GREP} '/[ps][0-9][0-9]*x[0-9][0-9]*/' | ${WC} -l | ${TR} -d ' '`
+    if [ ${CHECKFBS} -gt 0 ]; then
+        URL=`echo -n "${URL}" | ${SED} 's/\/[ps][0-9][0-9]*x[0-9][0-9]*\//\//g'`
+    fi
+
 
     # parse url
     HOSTNAME=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$3);}'`
