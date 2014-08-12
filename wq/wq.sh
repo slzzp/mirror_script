@@ -187,7 +187,6 @@ while [ ! -z "$1" ]; do
     # if url: https://scontent-a-nrt.xx.fbcdn.net/hphotos-xpf1/t31.0-8/1272345_163157470544271_1358342518_o.jpg?dl=1
     # save file into 1272345_163157470544271_1358342518_o.jpg or 1272345_163157470544271_1358342518_o.jpg.N
     if [ 'dl' = "${ARGAN}" ]; then
-        echo "${HOSTNAMEC} ${HOSTNAMED}"
         CHECKCOUNT=1
         CHECKOUTFILE=`echo -n "${FILENAME}"`
         while [ ! -z "${CHECKOUTFILE}" ]; do
