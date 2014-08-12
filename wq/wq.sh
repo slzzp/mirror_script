@@ -83,17 +83,27 @@ while [ ! -z "$1" ]; do
     fi
 
 
+    # preprocess url
+    URL=`echo -n "$1"`
+
+    # check if $1's prefix is '//'
+    CHECKSLASHSLASH=`echo "$1" | ${CUT} -c 1-2`
+    if [ "//" = "${CHECKSLASHSLASH}" ]; then
+        URL=`echo -n "http:$1"`
+    fi
+
+
     # parse url
-    HOSTNAME=`echo "$1" | ${AWK} -F/ '{printf("%s",$3);}'`
+    HOSTNAME=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$3);}'`
     HOSTNAMEA=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$1);}'`
     HOSTNAMEB=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$2);}'`
     HOSTNAMEC=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$3);}'`
     HOSTNAMED=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$4);}'`
-    PATHA=`echo "$1" | ${AWK} -F/ '{printf("%s",$4);}'`
-    PATHB=`echo "$1" | ${AWK} -F/ '{printf("%s",$5);}'`
-    PATHC=`echo "$1" | ${AWK} -F/ '{printf("%s",$6);}'`
-    PATHD=`echo "$1" | ${AWK} -F/ '{printf("%s",$7);}'`
-    FILENAMEARG=`${BASENAME} "$1"`
+    PATHA=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$4);}'`
+    PATHB=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$5);}'`
+    PATHC=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$6);}'`
+    PATHD=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$7);}'`
+    FILENAMEARG=`${BASENAME} "${URL}"`
     FILENAME=`echo "${FILENAMEARG}" | ${AWK} -F? '{printf("%s",$1);}'`
     ARGS=`echo "${FILENAMEARG}" | ${AWK} -F? '{printf("%s",$2);}'`
     ARGA=`echo "${ARGS}" | ${AWK} -F\& '{printf("%s",$1);}'`
@@ -109,16 +119,31 @@ while [ ! -z "$1" ]; do
     # get pic: http://i.imgur.com/Hwrk1Vl.jpg
     # check jpg from http://imgur.com/Hwrk1Vl content ?
 
-    # TODO: ppt.cc
-    # if url: http://ppt.cc/4Uu-
-    # get pic: http://http://ppt.cc/4Uu-@.jpg (maybe [jJ][Pp][Gg] [Gg][Ii][Ff] [Pp][Nn][Gg])
-    # check jpg from http://ppt.cc/4Uu- content ?
 
-    # TODO: ppt.cc
-    # if url: http://ppt.cc/4Uu-@.jpg without referer
-    # auto set referer to http://ppt.cc/4Uu-
+    # ppt.cc
+    # 1. pic file
+    #    if url: http://ppt.cc/4Uu-@.jpg without referer
+    #    auto set referer to http://ppt.cc/4Uu-
+    # 2. get pic file
+    #    if url: http://ppt.cc/4Uu-
+    #    get pic: http://http://ppt.cc/4Uu-@.jpg (maybe [jJ][Pp][Gg] [Gg][Ii][Ff] [Pp][Nn][Gg])
+    #    check jpg from http://ppt.cc/4Uu- content ?
+    if [ 'ppt.cc' = "${HOSTNAME}" ]; then
+        CHECKAT=`echo "${URL}" | ${GREP} '@' | ${WC} -l | ${TR} -d ' '`
+        if [ ${CHECKAT} -gt 0 ]; then
+            TMPREFERER=`echo "${URL}" | ${AWK} -F@ '{printf("%s",$1);}'`
 
-    # fastpic file
+            WGETREFERER="--referer=${TMPREFERER}"
+            CLEANREFERER=1
+        else
+            echo 'TODO'
+            shift
+            continue
+        fi
+    fi
+
+
+    # fastpic image
     # if url: http://www.fastpic.jp/images.php?file=4117028328.jpg
     # save file into 4117028328.jpg or 4117028328.jpg.N
     if [ 'www.fastpic.jp' = "${HOSTNAME}" -a 'images.php' = "${FILENAME}" -a 'file' = "${ARGAN}" ]; then
@@ -137,45 +162,40 @@ while [ ! -z "$1" ]; do
         CLEANOUTFILE=1
     fi
 
+
     # facebook oh/oe pic
     # if url: https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-xpf1/v/t1.0-9/10489954_760151634035462_3295158177063468216_n.jpg?oh=9d34618b6532a1451cf7816ad38811bd&oe=54599FA2&__gda__=1413965256_cd34923b97f4eb4ad7bb4f1394f9efdb
     # save file into 10489954_760151634035462_3295158177063468216_n.jpg or 10489954_760151634035462_3295158177063468216_n.jpg.N
-    CHECKQOH=`echo "$1" | ${GREP} '?oh=' | ${WC} -l | ${TR} -d ' '`
-    if [ ${CHECKQOH} -gt 0 ]; then
-        URL=`echo "$1" | ${AWK} -F\? '{printf("%s",$1);}'`
-        BASEFILENAME=`${BASENAME} "${URL}"`
-
+    if [ 'oh' = "${ARGAN}" -a 'oe' = "${ARGBN}" ]; then
         CHECKCOUNT=1
-        CHECKOUTFILE=`echo -n "${BASEFILENAME}"`
+        CHECKOUTFILE=`echo -n "${FILENAME}"`
         while [ ! -z "${CHECKOUTFILE}" ]; do
             if [ ! -f "${CHECKOUTFILE}" ]; then
                 break
             fi
 
-            CHECKOUTFILE=`echo -n "${BASEFILENAME}.${CHECKCOUNT}"`
+            CHECKOUTFILE=`echo -n "${FILENAME}.${CHECKCOUNT}"`
             CHECKCOUNT=`${EXPR} ${CHECKCOUNT} + 1`
         done
 
         WGETOUTFILE="-O ${CHECKOUTFILE}"
         CLEANOUTFILE=1
     fi
+
 
     # facebook dl pic
-    # if url: https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-xpf1/v/t1.0-9/10489954_760151634035462_3295158177063468216_n.jpg?dl=1
-    # save file into 10489954_760151634035462_3295158177063468216_n.jpg or 10489954_760151634035462_3295158177063468216_n.jpg.N
-    CHECKQDL=`echo "$1" | ${GREP} '?dl=' | ${WC} -l | ${TR} -d ' '`
-    if [ ${CHECKQDL} -gt 0 ]; then
-        URL=`echo "$1" | ${AWK} -F\? '{printf("%s",$1);}'`
-        BASEFILENAME=`${BASENAME} "${URL}"`
-
+    # if url: https://scontent-a-nrt.xx.fbcdn.net/hphotos-xpf1/t31.0-8/1272345_163157470544271_1358342518_o.jpg?dl=1
+    # save file into 1272345_163157470544271_1358342518_o.jpg or 1272345_163157470544271_1358342518_o.jpg.N
+    if [ 'dl' = "${ARGAN}" ]; then
+        echo "${HOSTNAMEC} ${HOSTNAMED}"
         CHECKCOUNT=1
-        CHECKOUTFILE=`echo -n "${BASEFILENAME}"`
+        CHECKOUTFILE=`echo -n "${FILENAME}"`
         while [ ! -z "${CHECKOUTFILE}" ]; do
             if [ ! -f "${CHECKOUTFILE}" ]; then
                 break
             fi
 
-            CHECKOUTFILE=`echo -n "${BASEFILENAME}.${CHECKCOUNT}"`
+            CHECKOUTFILE=`echo -n "${FILENAME}.${CHECKCOUNT}"`
             CHECKCOUNT=`${EXPR} ${CHECKCOUNT} + 1`
         done
 
@@ -183,36 +203,22 @@ while [ ! -z "$1" ]; do
         CLEANOUTFILE=1
     fi
 
-
-    URL=`echo -n "$1"`
-
-
-    # check if $1's prefix is '//'
-    CHECKSLASHSLASH=`echo "$1" | ${CUT} -c 1-2`
-    if [ "//" = "${CHECKSLASHSLASH}" ]; then
-        URL=`echo -n "http:$1"`
-    fi
 
     # facebook limited width/height pic
     # if url: https://fbcdn-sphotos-e-a.akamaihd.net/hphotos-ak-xpa1/t31.0-8/s960x960/10514307_1450320061902023_7392152021835748963_o.jpg
     #         https://scontent-b-nrt.xx.fbcdn.net/hphotos-xpa1/t1.0-9/p240x240/10313489_415628195241707_2675330737228852867_n.jpg
     # update url: https://fbcdn-sphotos-e-a.akamaihd.net/hphotos-ak-xpa1/t31.0-8/10514307_1450320061902023_7392152021835748963_o.jpg
-
     CHECKFBS=`echo "${URL}" | ${GREP} '/[ps][0-9][0-9]*x[0-9][0-9]*/' | ${WC} -l | ${TR} -d ' '`
     if [ ${CHECKFBS} -gt 0 ]; then
         URL=`echo -n "${URL}" | ${SED} 's/\/[ps][0-9][0-9]*x[0-9][0-9]*\//\//g'`
     fi
 
 
-
     # pixiv: get pixture with faked referer
     #   url: http://i2.pixiv.net/img20/img/stargeyser/10931186.jpg?1277014586
     #   ref: http://www.pixiv.net/member_illust.php?mode=big&illust_id=10931186
-
     if [ 'pixiv' = "${HOSTNAMEB}" -a 'net' = "${HOSTNAMEC}" ]; then
-        FILENAME=`echo "${PATHD}" | ${AWK} -F? '{printf("%s",$1);}'`
         FILEID=`echo "${FILENAME}" | ${AWK} -F. '{printf("%d",$1);}'`
-        ARGS=`echo "${PATHD}" | ${AWK} -F? '{printf("%s",$2);}'`
 
         # if url has ? , remove all after ?
         if [ ! -z "${ARGS}" ]; then
@@ -223,15 +229,10 @@ while [ ! -z "$1" ]; do
         CLEANREFERER=1
     fi
 
+
     # get file first
     ${WGET} ${WGETOUTFILE} ${WGETOPTION} --user-agent="${WGETUSERAGENT}" ${WGETREFERER} "${URL}"
 
-    # TODO:
-    # pattern: facebook image
-    # url pattern:
-    #  1. http://sphotos-e.ak.fbcdn.net/hphotos-ak-prn1/579545_10151765622017074_220805590_n.jpg
-    # if get _n.jpg , try get _o.jpg;
-    # if got _o.jpg and md5sum of _n.jpg == md5sum of _o.jpg, remove _o.jpg, or reserve both _n.jpg and _o.jpg
 
     # pattern: tumblr image
     # url pattern:
