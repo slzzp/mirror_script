@@ -82,6 +82,28 @@ while [ ! -z "$1" ]; do
         continue
     fi
 
+
+    # parse url
+    HOSTNAME=`echo "$1" | ${AWK} -F/ '{printf("%s",$3);}'`
+    HOSTNAMEA=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$1);}'`
+    HOSTNAMEB=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$2);}'`
+    HOSTNAMEC=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$3);}'`
+    HOSTNAMED=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$4);}'`
+    PATHA=`echo "$1" | ${AWK} -F/ '{printf("%s",$4);}'`
+    PATHB=`echo "$1" | ${AWK} -F/ '{printf("%s",$5);}'`
+    PATHC=`echo "$1" | ${AWK} -F/ '{printf("%s",$6);}'`
+    PATHD=`echo "$1" | ${AWK} -F/ '{printf("%s",$7);}'`
+    FILENAMEARG=`${BASENAME} "$1"`
+    FILENAME=`echo "${FILENAMEARG}" | ${AWK} -F? '{printf("%s",$1);}'`
+    ARGS=`echo "${FILENAMEARG}" | ${AWK} -F? '{printf("%s",$2);}'`
+    ARGA=`echo "${ARGS}" | ${AWK} -F\& '{printf("%s",$1);}'`
+    ARGAN=`echo "${ARGA}" | ${AWK} -F= '{printf("%s",$1);}'`
+    ARGAV=`echo "${ARGA}" | ${AWK} -F= '{printf("%s",$2);}'`
+    ARGB=`echo "${ARGS}" | ${AWK} -F\& '{printf("%s",$2);}'`
+    ARGBN=`echo "${ARGB}" | ${AWK} -F= '{printf("%s",$1);}'`
+    ARGBV=`echo "${ARGB}" | ${AWK} -F= '{printf("%s",$2);}'`
+
+
     # TODO: imgur.com
     # if url: http://imgur.com/Hwrk1Vl
     # get pic: http://i.imgur.com/Hwrk1Vl.jpg
@@ -95,6 +117,25 @@ while [ ! -z "$1" ]; do
     # TODO: ppt.cc
     # if url: http://ppt.cc/4Uu-@.jpg without referer
     # auto set referer to http://ppt.cc/4Uu-
+
+    # fastpic file
+    # if url: http://www.fastpic.jp/images.php?file=4117028328.jpg
+    # save file into 4117028328.jpg or 4117028328.jpg.N
+    if [ 'www.fastpic.jp' = "${HOSTNAME}" -a 'images.php' = "${FILENAME}" -a 'file' = "${ARGAN}" ]; then
+        CHECKCOUNT=1
+        CHECKOUTFILE=`echo -n "${ARGAV}"`
+        while [ ! -z "${CHECKOUTFILE}" ]; do
+            if [ ! -f "${CHECKOUTFILE}" ]; then
+                break
+            fi
+
+            CHECKOUTFILE=`echo -n "${ARGAV}.${CHECKCOUNT}"`
+            CHECKCOUNT=`${EXPR} ${CHECKCOUNT} + 1`
+        done
+
+        WGETOUTFILE="-O ${CHECKOUTFILE}"
+        CLEANOUTFILE=1
+    fi
 
     # facebook oh/oe pic
     # if url: https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-xpf1/v/t1.0-9/10489954_760151634035462_3295158177063468216_n.jpg?oh=9d34618b6532a1451cf7816ad38811bd&oe=54599FA2&__gda__=1413965256_cd34923b97f4eb4ad7bb4f1394f9efdb
@@ -145,6 +186,7 @@ while [ ! -z "$1" ]; do
 
     URL=`echo -n "$1"`
 
+
     # check if $1's prefix is '//'
     CHECKSLASHSLASH=`echo "$1" | ${CUT} -c 1-2`
     if [ "//" = "${CHECKSLASHSLASH}" ]; then
@@ -162,16 +204,6 @@ while [ ! -z "$1" ]; do
     fi
 
 
-    # parse url
-    HOSTNAME=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$3);}'`
-    HOSTNAMEA=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$1);}'`
-    HOSTNAMEB=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$2);}'`
-    HOSTNAMEC=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$3);}'`
-    HOSTNAMED=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$4);}'`
-    PATHA=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$4);}'`
-    PATHB=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$5);}'`
-    PATHC=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$6);}'`
-    PATHD=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$7);}'`
 
     # pixiv: get pixture with faked referer
     #   url: http://i2.pixiv.net/img20/img/stargeyser/10931186.jpg?1277014586
