@@ -13,7 +13,7 @@ TR="/usr/bin/tr"
 WC="/usr/bin/wc"
 
 
-if [ -z "$1" ]; then
+if [ -z "$1" -o "." = "$1" -o "./" = "$1" ]; then
     exit
 fi
 
