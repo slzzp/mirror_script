@@ -43,6 +43,7 @@ while [ ! -z "$1" ]; do
     fi
 
     CLEANOUTFILE=0
+    CHECKOUTFILE=''
 
     # avoid double-typed command
     if [ "wq" = "$1" -o "wq.sh" = "$1" -o "$0" = "$1" ]; then
@@ -52,14 +53,14 @@ while [ ! -z "$1" ]; do
 
     # check referer
     CHECKREFERER=`echo "$1" | ${CUT} -c 1-10`
-    if [ "--referer=" = "${CHECKREFERER}" ]; then
+    if [ '--referer=' = "${CHECKREFERER}" ]; then
         WGETREFERER="$1"
         shift
         continue
     fi
 
     # check outfile
-    if [ "-O" = "$1" ]; then
+    if [ '-O' = "$1" ]; then
         if [ -z "$2" ]; then
             exit
         fi
@@ -68,6 +69,11 @@ while [ ! -z "$1" ]; do
         CHECKOUTFILE=`echo -n "$2"`
         while [ ! -z "${CHECKOUTFILE}" ]; do
             if [ ! -f "${CHECKOUTFILE}" ]; then
+                break
+            fi
+
+            if [ ! -s "${CHECKOUTFILE}" ]; then
+                ${RM} "${CHECKOUTFILE}"
                 break
             fi
 
@@ -154,6 +160,11 @@ while [ ! -z "$1" ]; do
                 break
             fi
 
+            if [ ! -s "${CHECKOUTFILE}" ]; then
+                ${RM} "${CHECKOUTFILE}"
+                break
+            fi
+
             CHECKOUTFILE=`echo -n "${ARGAV}.${CHECKCOUNT}"`
             CHECKCOUNT=`${EXPR} ${CHECKCOUNT} + 1`
         done
@@ -174,6 +185,11 @@ while [ ! -z "$1" ]; do
                 break
             fi
 
+            if [ ! -s "${CHECKOUTFILE}" ]; then
+                ${RM} "${CHECKOUTFILE}"
+                break
+            fi
+
             CHECKOUTFILE=`echo -n "${FILENAME}.${CHECKCOUNT}"`
             CHECKCOUNT=`${EXPR} ${CHECKCOUNT} + 1`
         done
@@ -191,6 +207,11 @@ while [ ! -z "$1" ]; do
         CHECKOUTFILE=`echo -n "${FILENAME}"`
         while [ ! -z "${CHECKOUTFILE}" ]; do
             if [ ! -f "${CHECKOUTFILE}" ]; then
+                break
+            fi
+
+            if [ ! -s "${CHECKOUTFILE}" ]; then
+                ${RM} "${CHECKOUTFILE}"
                 break
             fi
 
