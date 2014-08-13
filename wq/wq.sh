@@ -17,6 +17,28 @@ TR="/usr/bin/tr"
 WC="/usr/bin/wc"
 WGET="/usr/bin/wget"
 
+
+wq_get_filename() {
+    if [ ! -z "$1" ]; then
+        CHECKCOUNT=1
+        CHECKOUTFILE=`echo -n "$1"`
+        while [ ! -z "${CHECKOUTFILE}" ]; do
+            if [ ! -f "${CHECKOUTFILE}" ]; then
+                break
+            fi
+
+            if [ ! -s "${CHECKOUTFILE}" ]; then
+                ${RM} "${CHECKOUTFILE}"
+                break
+            fi
+
+            CHECKOUTFILE=`echo -n "$1.${CHECKCOUNT}"`
+            CHECKCOUNT=`${EXPR} ${CHECKCOUNT} + 1`
+        done
+    fi
+}
+
+
 # -nv: basic option for simple message
 # -4: some site has ipv6 address, but no route of ipv6, so force using ipv4 only
 # --no-check-certificate: do not check ssl/cert for https:// url
@@ -65,21 +87,7 @@ while [ ! -z "$1" ]; do
             exit
         fi
 
-        CHECKCOUNT=1
-        CHECKOUTFILE=`echo -n "$2"`
-        while [ ! -z "${CHECKOUTFILE}" ]; do
-            if [ ! -f "${CHECKOUTFILE}" ]; then
-                break
-            fi
-
-            if [ ! -s "${CHECKOUTFILE}" ]; then
-                ${RM} "${CHECKOUTFILE}"
-                break
-            fi
-
-            CHECKOUTFILE=`echo -n "$2.${CHECKCOUNT}"`
-            CHECKCOUNT=`${EXPR} ${CHECKCOUNT} + 1`
-        done
+        wq_get_filename "$2"
 
         WGETOUTFILE="-O ${CHECKOUTFILE}"
         CLEANOUTFILE=1
@@ -153,21 +161,7 @@ while [ ! -z "$1" ]; do
     # if url: http://www.fastpic.jp/images.php?file=4117028328.jpg
     # save file into 4117028328.jpg or 4117028328.jpg.N
     if [ 'www.fastpic.jp' = "${HOSTNAME}" -a 'images.php' = "${FILENAME}" -a 'file' = "${ARGAN}" ]; then
-        CHECKCOUNT=1
-        CHECKOUTFILE=`echo -n "${ARGAV}"`
-        while [ ! -z "${CHECKOUTFILE}" ]; do
-            if [ ! -f "${CHECKOUTFILE}" ]; then
-                break
-            fi
-
-            if [ ! -s "${CHECKOUTFILE}" ]; then
-                ${RM} "${CHECKOUTFILE}"
-                break
-            fi
-
-            CHECKOUTFILE=`echo -n "${ARGAV}.${CHECKCOUNT}"`
-            CHECKCOUNT=`${EXPR} ${CHECKCOUNT} + 1`
-        done
+        wq_get_filename "${ARGAV}"
 
         WGETOUTFILE="-O ${CHECKOUTFILE}"
         CLEANOUTFILE=1
@@ -178,21 +172,7 @@ while [ ! -z "$1" ]; do
     # if url: https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-xpf1/v/t1.0-9/10489954_760151634035462_3295158177063468216_n.jpg?oh=9d34618b6532a1451cf7816ad38811bd&oe=54599FA2&__gda__=1413965256_cd34923b97f4eb4ad7bb4f1394f9efdb
     # save file into 10489954_760151634035462_3295158177063468216_n.jpg or 10489954_760151634035462_3295158177063468216_n.jpg.N
     if [ 'oh' = "${ARGAN}" -a 'oe' = "${ARGBN}" ]; then
-        CHECKCOUNT=1
-        CHECKOUTFILE=`echo -n "${FILENAME}"`
-        while [ ! -z "${CHECKOUTFILE}" ]; do
-            if [ ! -f "${CHECKOUTFILE}" ]; then
-                break
-            fi
-
-            if [ ! -s "${CHECKOUTFILE}" ]; then
-                ${RM} "${CHECKOUTFILE}"
-                break
-            fi
-
-            CHECKOUTFILE=`echo -n "${FILENAME}.${CHECKCOUNT}"`
-            CHECKCOUNT=`${EXPR} ${CHECKCOUNT} + 1`
-        done
+        wq_get_filename "${FILENAME}"
 
         WGETOUTFILE="-O ${CHECKOUTFILE}"
         CLEANOUTFILE=1
@@ -203,21 +183,7 @@ while [ ! -z "$1" ]; do
     # if url: https://scontent-a-nrt.xx.fbcdn.net/hphotos-xpf1/t31.0-8/1272345_163157470544271_1358342518_o.jpg?dl=1
     # save file into 1272345_163157470544271_1358342518_o.jpg or 1272345_163157470544271_1358342518_o.jpg.N
     if [ 'dl' = "${ARGAN}" ]; then
-        CHECKCOUNT=1
-        CHECKOUTFILE=`echo -n "${FILENAME}"`
-        while [ ! -z "${CHECKOUTFILE}" ]; do
-            if [ ! -f "${CHECKOUTFILE}" ]; then
-                break
-            fi
-
-            if [ ! -s "${CHECKOUTFILE}" ]; then
-                ${RM} "${CHECKOUTFILE}"
-                break
-            fi
-
-            CHECKOUTFILE=`echo -n "${FILENAME}.${CHECKCOUNT}"`
-            CHECKCOUNT=`${EXPR} ${CHECKCOUNT} + 1`
-        done
+        wq_get_filename "${FILENAME}"
 
         WGETOUTFILE="-O ${CHECKOUTFILE}"
         CLEANOUTFILE=1
