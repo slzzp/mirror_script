@@ -38,6 +38,21 @@ wq_get_filename() {
     fi
 }
 
+wq_string_has_char() {
+    # $1 = string
+    # $2 = char
+    if [ -z "$1" -o -z "$2" ]; then
+        return 0
+    fi
+
+    CHECKCHAR=`echo "$1" | ${GREP} "$2" | ${WC} -l | ${TR} -d ' '`
+    if [ ${CHECKCHAR} -gt 0 ]; then
+        return 1
+    fi
+
+    return 0
+}
+
 
 # -nv: basic option for simple message
 # -4: some site has ipv6 address, but no route of ipv6, so force using ipv4 only
@@ -143,8 +158,8 @@ while [ ! -z "$1" ]; do
     #    get pic: http://http://ppt.cc/4Uu-@.jpg (maybe [jJ][Pp][Gg] [Gg][Ii][Ff] [Pp][Nn][Gg])
     #    check jpg from http://ppt.cc/4Uu- content ?
     if [ 'ppt.cc' = "${HOSTNAME}" ]; then
-        CHECKAT=`echo "${URL}" | ${GREP} '@' | ${WC} -l | ${TR} -d ' '`
-        if [ ${CHECKAT} -gt 0 ]; then
+        wq_string_has_char "${URL}" '@'
+        if [ "$?" -gt 0 ]; then
             TMPREFERER=`echo "${URL}" | ${AWK} -F@ '{printf("%s",$1);}'`
 
             WGETREFERER="--referer=${TMPREFERER}"
