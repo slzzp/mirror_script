@@ -123,6 +123,7 @@ while [ ! -z "$1" ]; do
 
 
     # parse url
+    PROTOCOL=`echo "${URL}" | ${AWK} -F: '{printf("%s",$1);}'`
     HOSTNAME=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$3);}'`
     HOSTNAMEA=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$1);}'`
     HOSTNAMEB=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$2);}'`
@@ -134,6 +135,7 @@ while [ ! -z "$1" ]; do
     PATHD=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$7);}'`
     FILENAMEARG=`${BASENAME} "${URL}"`
     FILENAME=`echo "${FILENAMEARG}" | ${AWK} -F? '{printf("%s",$1);}'`
+    FILENAMEEXT=`echo "${FILENAME}" | ${AWK} -F. '{printf("%s", $NF);}'`
     ARGS=`echo "${FILENAMEARG}" | ${AWK} -F? '{printf("%s",$2);}'`
     ARGA=`echo "${ARGS}" | ${AWK} -F\& '{printf("%s",$1);}'`
     ARGAN=`echo "${ARGA}" | ${AWK} -F= '{printf("%s",$1);}'`
@@ -241,45 +243,39 @@ while [ ! -z "$1" ]; do
     #  2. http://24.media.tumblr.com/tumblr_kt065fJHvm1qzkcgao1_r1_1280.jpg
     #  3. http://24.media.tumblr.com/tumblr_lp2h0dKA8s1qzn3jqo1_500.jpg
     #  4. TBD
-
-    TUMBLRCOUNT=`echo "$1" | ${GREP} '[0-9].media.tumblr.com/' | ${WC} -l | ${TR} -d ' '`
-    if [ $TUMBLRCOUNT -gt 0 ]; then
-        HOSTNAME=`echo "$1" | ${AWK} -F/ '{printf("%s",$3);}'`
-
-        # check pattern 1
-        FILENAME=`echo "$1" | ${AWK} -F/ '{printf("%s",$5);}'`
-        if [ -z "${FILENAME}" ]; then
-            # this is pattern 2 or 3
-            FILENAME=`echo "$1" | ${AWK} -F/ '{printf("%s",$4);}'`
+    if [ 'media' = "${HOSTNAMEB}" -a 'tumblr' = "${HOSTNAMEC}" -a 'com' = "${HOSTNAMED}" ]; then
+        if [ -z "${PATHB}" ]; then
+            # pattern 2 or 3
             PATH=''
         else
-            # this is pattern 1
-            PATH=`echo "$1" | ${AWK} -F/ '{printf("%s",$4);}'`
-            PATH=`echo -n "${PATH}/"`
+            # pattern 1
+            PATH="${PATHA}/"
         fi
 
         # check pattern 2
         FILENAMESIZE=`echo "${FILENAME}" | ${AWK} -F_ '{printf("%s",$4);}'`
         if [ -z "${FILENAMESIZE}" ]; then
-            # this is pattern 3
+            # pattern 3
             FILENAMEBODY=`echo "${FILENAME}" | ${AWK} -F_ '{printf("%s_%s",$1,$2);}'`
         else
-            # this is pattern 2
+            # pattern 2
             FILENAMEBODY=`echo "${FILENAME}" | ${AWK} -F_ '{printf("%s_%s_%s",$1,$2,$3);}'`
         fi
-
-        FILENAMEEXT=`echo "${FILENAME}" | ${AWK} -F. '{printf("%s",$2);}'`
 
         # try get bigger size: 1280 1024 800 600
         # maybe there are more bigger size in the future
         for SIZE in 1280 1024 800 600; do
-            URL=`echo -n "http://${HOSTNAME}/${PATH}${FILENAMEBODY}_${SIZE}.${FILENAMEEXT}"`
-            LOCALFILENAME=`echo -n "${FILENAMEBODY}_${SIZE}.${FILENAMEEXT}"`
+            LOCALURL=`echo -n "${PROTOCOL}://${HOSTNAME}/${PATH}${FILENAMEBODY}_${SIZE}.${FILENAMEEXT}"`
 
-            ${WGET} ${WGETOUTFILE} ${WGETOPTION} --user-agent="${WGETUSERAGENT}" ${WGETREFERER} "${URL}"
+            wq_get_filename "${FILENAMEBODY}_${SIZE}.${FILENAMEEXT}"
+
+            WGETOUTFILE="-O ${CHECKOUTFILE}"
+            CLEANOUTFILE=1
+
+            ${WGET} ${WGETOUTFILE} ${WGETOPTION} --user-agent="${WGETUSERAGENT}" ${WGETREFERER} "${LOCALURL}"
 
             # if get a file, skip smaller size
-            if [ -f "${LOCALFILENAME}" ]; then
+            if [ -s "${CHECKOUTFILE}" ]; then
                 break
             fi
         done
