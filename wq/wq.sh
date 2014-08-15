@@ -236,6 +236,10 @@ while [ ! -z "$1" ]; do
     # get file first
     ${WGET} ${WGETOUTFILE} ${WGETOPTION} --user-agent="${WGETUSERAGENT}" ${WGETREFERER} "${URL}"
 
+    # if filesize is 0, remove it
+    if [ ! -z "${CHECKOUTFILE}" -a -f "${CHECKOUTFILE}" -a ! -s "${CHECKOUTFILE}" ]; then
+        ${RM} "${CHECKOUTFILE}"
+    fi
 
     # pattern: tumblr image
     # url pattern:
@@ -273,6 +277,11 @@ while [ ! -z "$1" ]; do
             CLEANOUTFILE=1
 
             ${WGET} ${WGETOUTFILE} ${WGETOPTION} --user-agent="${WGETUSERAGENT}" ${WGETREFERER} "${LOCALURL}"
+
+            # if filesize is 0, remove it
+            if [ ! -z "${CHECKOUTFILE}" -a -f "${CHECKOUTFILE}" -a ! -s "${CHECKOUTFILE}" ]; then
+                ${RM} "${CHECKOUTFILE}"
+            fi
 
             # if get a file, skip smaller size
             if [ -s "${CHECKOUTFILE}" ]; then
