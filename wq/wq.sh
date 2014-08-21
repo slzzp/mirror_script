@@ -129,6 +129,7 @@ while [ ! -z "$1" ]; do
     HOSTNAMEB=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$2);}'`
     HOSTNAMEC=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$3);}'`
     HOSTNAMED=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$4);}'`
+    HOSTNAMEE=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$5);}'`
     PATHA=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$4);}'`
     PATHB=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$5);}'`
     PATHC=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$6);}'`
@@ -150,6 +151,14 @@ while [ ! -z "$1" ]; do
     # get pic: http://i.imgur.com/Hwrk1Vl.jpg
     # check jpg from http://imgur.com/Hwrk1Vl content ?
 
+
+    # xuite pic
+    # if url: http://5.share.photo.xuite.net/big.max/1580be0/5076492/1041956820_o.jpg
+    # auto set referer to http://blog.xuite.net/big.max
+    if [ 'photo' = "${HOSTNAMEC}" -a 'xuite' = "${HOSTNAMED}" -a 'net' = "${HOSTNAMEE}" ]; then
+        WGETREFERER="--referer=http://blog.xuite.net/${PATHA}"
+        CLEANREFERER=1
+    fi
 
     # ppt.cc
     # 1. pic file
