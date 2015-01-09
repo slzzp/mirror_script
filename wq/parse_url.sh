@@ -5,11 +5,16 @@ if [ -z "$1" ]; then
 fi
 
 
+# if show debug message, set to 1, else set to 0
+DEBUGMSG=0
+
+
 # external commands
 AWK="/usr/bin/awk"
 BASENAME="/usr/bin/basename"
 CUT="/usr/bin/cut"
 EXPR="/usr/bin/expr"
+
 
 # preprocess url
 URL=`echo -n "$1"`
@@ -47,12 +52,10 @@ FILENAMEMAINLEN=`${EXPR} ${FILENAMELEN} - ${FILENAMEEXTLEN} - 1`
 
 FILENAMEMAIN=`echo "${FILENAME}" | ${CUT} -c 1-${FILENAMEMAINLEN}`
 
-FILENAMEMAINA=`echo "${FILENAMEMAIN}" | ${AWK} -F_ '{printf("%s",$1);}'`
-FILENAMEMAINB=`echo "${FILENAMEMAIN}" | ${AWK} -F_ '{printf("%s",$2);}'`
-FILENAMEMAINC=`echo "${FILENAMEMAIN}" | ${AWK} -F_ '{printf("%s",$3);}'`
-FILENAMEMAIND=`echo "${FILENAMEMAIN}" | ${AWK} -F_ '{printf("%s",$4);}'`
-
-echo '10403669_803677823029050_1019573627237455786_n.jpg' | cut -c 1-49
+FILENAMEMAINFBA=`echo "${FILENAMEMAIN}" | ${AWK} -F_ '{printf("%s",$1);}'`
+FILENAMEMAINFBB=`echo "${FILENAMEMAIN}" | ${AWK} -F_ '{printf("%s",$2);}'`
+FILENAMEMAINFBC=`echo "${FILENAMEMAIN}" | ${AWK} -F_ '{printf("%s",$3);}'`
+FILENAMEMAINFBD=`echo "${FILENAMEMAIN}" | ${AWK} -F_ '{printf("%s",$4);}'`
 
 ARGS=`echo "${FILENAMEARG}" | ${AWK} -F? '{printf("%s",$2);}'`
 
@@ -69,40 +72,41 @@ ARGCN=`echo "${ARGC}" | ${AWK} -F= '{printf("%s",$1);}'`
 ARGCV=`echo "${ARGC}" | ${AWK} -F= '{printf("%s",$2);}'`
 
 
-# output
-echo "URL='${URL}'"
-echo "PROTOCOL='${PROTOCOL}'"
+# debug output
+if [ ${DEBUGMSG} -gt 0 ]; then
+    echo "URL='${URL}'"
+    echo "PROTOCOL='${PROTOCOL}'"
 
-echo "HOSTNAME='${HOSTNAME}'"
-echo "HOSTNAMEA='${HOSTNAMEA}'"
-echo "HOSTNAMEB='${HOSTNAMEB}'"
-echo "HOSTNAMEC='${HOSTNAMEC}'"
-echo "HOSTNAMED='${HOSTNAMED}'"
-echo "HOSTNAMEE='${HOSTNAMEE}'"
+    echo "HOSTNAME='${HOSTNAME}'"
+    echo "HOSTNAMEA='${HOSTNAMEA}'"
+    echo "HOSTNAMEB='${HOSTNAMEB}'"
+    echo "HOSTNAMEC='${HOSTNAMEC}'"
+    echo "HOSTNAMED='${HOSTNAMED}'"
+    echo "HOSTNAMEE='${HOSTNAMEE}'"
 
-echo "PATHA='${PATHA}'"
-echo "PATHB='${PATHB}'"
-echo "PATHC='${PATHC}'"
-echo "PATHD='${PATHD}'"
+    echo "PATHA='${PATHA}'"
+    echo "PATHB='${PATHB}'"
+    echo "PATHC='${PATHC}'"
+    echo "PATHD='${PATHD}'"
 
-echo "FILENAMEARG='${FILENAMEARG}'"
-echo "FILENAME='${FILENAME}'"
-echo "FILENAMEMAIN='${FILENAMEMAIN}'"
-echo "FILENAMEEXT='${FILENAMEEXT}'"
+    echo "FILENAMEARG='${FILENAMEARG}'"
+    echo "FILENAME='${FILENAME}'"
+    echo "FILENAMEMAIN='${FILENAMEMAIN}'"
+    echo "FILENAMEEXT='${FILENAMEEXT}'"
 
-echo "FILENAMEMAINA='${FILENAMEMAINA}'"
-echo "FILENAMEMAINB='${FILENAMEMAINB}'"
-echo "FILENAMEMAINC='${FILENAMEMAINC}'"
-echo "FILENAMEMAIND='${FILENAMEMAIND}'"
+    echo "FILENAMEMAINFBA='${FILENAMEMAINFBA}'"
+    echo "FILENAMEMAINFBB='${FILENAMEMAINFBB}'"
+    echo "FILENAMEMAINFBC='${FILENAMEMAINFBC}'"
+    echo "FILENAMEMAINFBD='${FILENAMEMAINFBD}'"
 
-echo "ARGS='${ARGS}'"
-echo "ARGA='${ARGA}'"
-echo "ARGAN='${ARGAN}'"
-echo "ARGAV='${ARGAV}'"
-echo "ARGB='${ARGB}'"
-echo "ARGBN='${ARGBN}'"
-echo "ARGBV='${ARGBV}'"
-echo "ARGC='${ARGC}'"
-echo "ARGCN='${ARGCN}'"
-echo "ARGCV='${ARGCV}'"
-
+    echo "ARGS='${ARGS}'"
+    echo "ARGA='${ARGA}'"
+    echo "ARGAN='${ARGAN}'"
+    echo "ARGAV='${ARGAV}'"
+    echo "ARGB='${ARGB}'"
+    echo "ARGBN='${ARGBN}'"
+    echo "ARGBV='${ARGBV}'"
+    echo "ARGC='${ARGC}'"
+    echo "ARGCN='${ARGCN}'"
+    echo "ARGCV='${ARGCV}'"
+fi
