@@ -74,16 +74,10 @@ while [ ! -z "$1" ]; do
         URL=`echo -n "http:$1"`
     fi
 
+
     # parse url
-    HOSTNAME=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$3);}'`
-    HOSTNAMEA=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$1);}'`
-    HOSTNAMEB=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$2);}'`
-    HOSTNAMEC=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$3);}'`
-    HOSTNAMED=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$4);}'`
-    PATHA=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$4);}'`
-    PATHB=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$5);}'`
-    PATHC=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$6);}'`
-    PATHD=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$7);}'`
+    . ~/work/mirror_script/wq/parse_url.sh "${URL}"
+
 
     # pixiv: get pixture with faked referer
     #   url: http://i2.pixiv.net/img20/img/stargeyser/10931186.jpg?1277014586
