@@ -12,6 +12,9 @@ BASENAME="/usr/bin/basename"
 CUT="/usr/bin/cut"
 EXPR="/usr/bin/expr"
 GREP="/bin/grep"
+LS="/bin/ls"
+MKDIR="/bin/mkdir"
+RM="/bin/rm"
 SED="/bin/sed"
 TR="/usr/bin/tr"
 WC="/usr/bin/wc"
@@ -68,6 +71,9 @@ CLEANREFERER=1
 # outfile default none
 CLEANOUTFILE=1
 
+# check if do mkdir first
+MKDIRFIRST=0
+
 while [ ! -z "$1" ]; do
     if [ ${CLEANREFERER} -gt 0 ]; then
         WGETREFERER=""
@@ -92,6 +98,39 @@ while [ ! -z "$1" ]; do
     CHECKREFERER=`echo "$1" | ${CUT} -c 1-10`
     if [ '--referer=' = "${CHECKREFERER}" ]; then
         WGETREFERER="$1"
+        shift
+        continue
+    fi
+
+    # set dir
+    if [ '-d' = "$1" ]; then
+        shift
+
+        if [ -z "$1" ]; then
+            echo "ERROR: empty dir"
+            exit
+        fi
+
+        if [ ! -d "$1" ]; then
+            ${MKDIR} "$1"
+
+            if [ ! -d "$1" ]; then
+                echo "ERROR: mkdir fail"
+                exit
+            fi
+
+            echo "MKDIR $1"
+        else
+            echo "EXIST $1"
+        fi
+
+        if [ -d "$1" ]; then
+            MKDIRFIRST=1
+            cd "$1"
+
+            echo "CD $1"
+        fi
+
         shift
         continue
     fi
@@ -301,3 +340,18 @@ while [ ! -z "$1" ]; do
 
     shift
 done
+
+if [ ${MKDIRFIRST} -gt 0 ]; then
+    ~/work/mirror_script/wq/rmdotdup.sh
+    ~/work/mirror_script/wq/rmdirdup.sh ../
+
+    if [ -d '../../ad9' ]; then
+        ~/work/mirror_script/wq/rmdirdup.sh ../../ad9/
+    fi
+
+    if [ -d '../../../ad9' ]; then
+        ~/work/mirror_script/wq/rmdirdup.sh ../../../ad9/
+    fi
+
+    echo "file count: `${LS} | ${WC} -l`"
+fi
