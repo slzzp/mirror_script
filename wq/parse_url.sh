@@ -14,6 +14,7 @@ AWK="/usr/bin/awk"
 BASENAME="/usr/bin/basename"
 CUT="/usr/bin/cut"
 EXPR="/usr/bin/expr"
+SED="/bin/sed"
 
 
 # preprocess url
@@ -26,10 +27,18 @@ if [ "//" = "${CHECKSLASHSLASH}" ]; then
 fi
 
 
-# parse url
-PROTOCOL=`echo "${URL}" | ${AWK} -F: '{printf("%s",$1);}'`
+# URL decode first for parse
+#   %26 -> &
+#   %2F -> /
+#   %3D -> =
+#   %3F -> ?
+PARSEURL=`echo -n "${URL}" | ${SED} 's/%26/\&/g' | ${SED} 's/%2F/\//g' | ${SED} 's/%3D/\=/g' | ${SED} 's/%3F/\?/g'`
 
-HOSTNAME=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$3);}'`
+
+# parse url
+PROTOCOL=`echo "${PARSEURL}" | ${AWK} -F: '{printf("%s",$1);}'`
+
+HOSTNAME=`echo "${PARSEURL}" | ${AWK} -F/ '{printf("%s",$3);}'`
 
 HOSTNAMEA=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$1);}'`
 HOSTNAMEB=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$2);}'`
@@ -37,12 +46,12 @@ HOSTNAMEC=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$3);}'`
 HOSTNAMED=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$4);}'`
 HOSTNAMEE=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$5);}'`
 
-PATHA=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$4);}'`
-PATHB=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$5);}'`
-PATHC=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$6);}'`
-PATHD=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$7);}'`
+PATHA=`echo "${PARSEURL}" | ${AWK} -F/ '{printf("%s",$4);}'`
+PATHB=`echo "${PARSEURL}" | ${AWK} -F/ '{printf("%s",$5);}'`
+PATHC=`echo "${PARSEURL}" | ${AWK} -F/ '{printf("%s",$6);}'`
+PATHD=`echo "${PARSEURL}" | ${AWK} -F/ '{printf("%s",$7);}'`
 
-FILENAMEARG=`${BASENAME} "${URL}"`
+FILENAMEARG=`${BASENAME} "${PARSEURL}"`
 FILENAME=`echo "${FILENAMEARG}" | ${AWK} -F? '{printf("%s",$1);}'`
 FILENAMEEXT=`echo "${FILENAME}" | ${AWK} -F. '{printf("%s", $NF);}'`
 
