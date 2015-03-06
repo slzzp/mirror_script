@@ -14,6 +14,22 @@ TR="/usr/bin/tr"
 WC="/usr/bin/wc"
 
 
+wq_string_has_char() {
+    # $1 = string
+    # $2 = char
+    if [ -z "$1" -o -z "$2" ]; then
+        return 0
+    fi
+
+    CHECKCHAR=`echo "$1" | ${GREP} "$2" | ${WC} -l | ${TR} -d ' '`
+    if [ ${CHECKCHAR} -gt 0 ]; then
+        return 1
+    fi
+
+    return 0
+}
+
+
 while [ ! -z "$1" ]; do
     # avoid double-typed command
     if [ "$0" = "$1" ]; then
@@ -21,6 +37,8 @@ while [ ! -z "$1" ]; do
         continue
     fi
 
+
+    # preprocess url
     URL=`echo -n "$1"`
 
     # check if $1's prefix is '//'
@@ -30,28 +48,26 @@ while [ ! -z "$1" ]; do
     fi
 
     # parse url
-    HOSTNAME=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$3);}'`
-    HOSTNAMEA=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$1);}'`
-    HOSTNAMEB=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$2);}'`
-    HOSTNAMEC=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$3);}'`
-    HOSTNAMED=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$4);}'`
-    PATHA=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$4);}'`
-    PATHB=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$5);}'`
-    PATHC=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$6);}'`
-    PATHD=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$7);}'`
+    . ~/work/mirror_script/wq/parse_url.sh "${URL}"
 
-    # check url    
 
+    # check url
     if [ 'album.blog.yam.com' = "${HOSTNAME}" ]; then
         # http://album.blog.yam.com/death1121
+#        wq_string_has_char "${URL}" '@'
+#        if [ "$?" -gt 0 ]; then
+
         HASAND=`echo "${PATHA}" | ${GREP} -- '&' | ${WC} -l | ${TR} -d ' '`
         if [ ${HASAND} -eq 0 ]; then
-            if [ -f ~/work/mirror_script/album.blog.yam.com/user.sh ]; then
-                ~/work/mirror_script/album.blog.yam.com/user.sh ${URL}
+            WORKER=~/work/mirror_script/album.blog.yam.com/user.sh
+
+            if [ ! -z "${WORKER}" -a -f "${WORKER}" ]; then
+                ${WORKER} ${URL}
+
                 shift
                 continue
             else
-                echo 'error: lost script: ~/work/mirror_script/album.blog.yam.com/user.sh'
+                echo "Error: lost script: ${WORKER}"
                 exit
             fi
         fi
@@ -59,12 +75,15 @@ while [ ! -z "$1" ]; do
         # http://album.blog.yam.com/album.php?userid=death1121&page=1&limit=12
         HASUSERID=`echo "${PATHA}" | ${GREP} -- '?userid=' | ${WC} -l | ${TR} -d ' '`
         if [ ${HASUSERID} -gt 0 ]; then
-            if [ -f ~/work/mirror_script/album.blog.yam.com/album.sh ]; then
-                ~/work/mirror_script/album.blog.yam.com/album.sh ${URL}
+            WORKER=~/work/mirror_script/album.blog.yam.com/album.sh
+
+            if [ ! -z "${WORKER}" -a -f "${WORKER}" ]; then
+                ${WORKER} ${URL}
+
                 shift
                 continue
             else
-                echo 'error: lost script: ~/work/mirror_script/album.blog.yam.com/album.sh'
+                echo "Error: lost script: ${WORKER}"
                 exit
             fi
         fi
@@ -72,12 +91,15 @@ while [ ! -z "$1" ]; do
         # http://album.blog.yam.com/death1121&folder=9939631
         HASFOLDER=`echo "${PATHA}" | ${GREP} -- '&folder=' | ${WC} -l | ${TR} -d ' '`
         if [ ${HASFOLDER} -gt 0 ]; then
-            if [ -f ~/work/mirror_script/album.blog.yam.com/folder.sh ]; then
-                ~/work/mirror_script/album.blog.yam.com/folder.sh ${URL}
+            WORKER=~/work/mirror_script/album.blog.yam.com/folder.sh
+
+            if [ ! -z "${WORKER}" -a -f "${WORKER}" ]; then
+                ${WORKER} ${URL}
+
                 shift
                 continue
             else
-                echo 'error: lost script: ~/work/mirror_script/album.blog.yam.com/folder.sh'
+                echo "Error: lost script: ${WORKER}"
                 exit
             fi
         fi
@@ -85,12 +107,15 @@ while [ ! -z "$1" ]; do
         # http://album.blog.yam.com/show.php?a=death1121&f=9939631&i=24590367&p=160
         HASSHOW=`echo "${PATHA}" | ${GREP} -- '/show.php?' | ${WC} -l | ${TR} -d ' '`
         if [ ${HASSHOW} -gt 0 ]; then
-            if [ -f ~/work/mirror_script/album.blog.yam.com/page.sh ]; then
-                ~/work/mirror_script/album.blog.yam.com/page.sh ${URL}
+            WORKER=~/work/mirror_script/album.blog.yam.com/page.sh
+
+            if [ ! -z "${WORKER}" -a -f "${WORKER}" ]; then
+                ${WORKER} ${URL}
+
                 shift
                 continue
             else
-                echo 'error: lost script: ~/work/mirror_script/album.blog.yam.com/page.sh'
+                echo "Error: lost script: ${WORKER}"
                 exit
             fi
         fi
@@ -99,12 +124,15 @@ while [ ! -z "$1" ]; do
     if [ 'blog.livedoor.jp' = "${HOSTNAME}" ]; then
         # http://blog.livedoor.jp/pinkelech/archives/25313738.html
         if [ 'archives' = "${PATHB}" ]; then
-            if [ -f ~/work/mirror_script/blog.livedoor.jp/archives.sh ]; then
-                ~/work/mirror_script/blog.livedoor.jp/archives.sh ${URL}
+            WORKER=~/work/mirror_script/blog.livedoor.jp/archives.sh
+
+            if [ ! -z "${WORKER}" -a -f "${WORKER}" ]; then
+                ${WORKER} ${URL}
+
                 shift
                 continue
             else
-                echo 'error: lost script: ~/work/mirror_script/blog.livedoor.jp/archives.sh'
+                echo "Error: lost script: ${WORKER}"
                 exit
             fi
         fi
@@ -114,17 +142,19 @@ while [ ! -z "$1" ]; do
         # http://sanzierogazo.blog129.fc2.com/blog-entry-2564.html
         HOSTNAMEBB=`echo "${HOSTNAMEB}" | ${CUT} -c 1-4`
         if [ 'blog' = "${HOSTNAMEBB}" ]; then
-            if [ -f ~/work/mirror_script/blog.fc2.com/blog_entry.sh ]; then
-                ~/work/mirror_script/blog.fc2.com/blog_entry.sh ${URL}
+            WORKER=~/work/mirror_script/blog.fc2.com/blog_entry.sh
+            if [ ! -z "${WORKER}" -a -f "${WORKER}" ]; then
+                ${WORKER} ${URL}
+
                 shift
                 continue
             else
-                echo 'error: lost script: ~/work/mirror_script/blog.fc2.com/blog_entry.sh'
+                echo "Error: lost script: ${WORKER}"
                 exit
             fi
         fi
     fi
 
-    echo "error: unknown url: ${URL}"
+    echo "Error: unknown url: ${URL}"
     exit
 done
