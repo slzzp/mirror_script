@@ -23,21 +23,21 @@ WGET="/usr/bin/wget"
 
 wq_get_filename() {
     if [ ! -z "$1" ]; then
-        CHECKCOUNT=1
-        CHECKOUTFILE=`echo -n "$1"`
-        while [ ! -z "${CHECKOUTFILE}" ]; do
-            if [ ! -f "${CHECKOUTFILE}" ]; then
+        CHECK_COUNT=1
+        USE_OUTFILE=`echo -n "$1"`
+        while [ ! -z "${USE_OUTFILE}" ]; do
+            if [ ! -f "${USE_OUTFILE}" ]; then
                 break
             fi
 
             # file exist but file size is 0, rm it
-            if [ ! -s "${CHECKOUTFILE}" ]; then
-                ${RM} "${CHECKOUTFILE}"
+            if [ ! -s "${USE_OUTFILE}" ]; then
+                ${RM} "${USE_OUTFILE}"
                 break
             fi
 
-            CHECKOUTFILE=`echo -n "$1.${CHECKCOUNT}"`
-            CHECKCOUNT=`${EXPR} ${CHECKCOUNT} + 1`
+            USE_OUTFILE=`echo -n "$1.${CHECK_COUNT}"`
+            CHECK_COUNT=`${EXPR} ${CHECK_COUNT} + 1`
         done
     fi
 }
@@ -49,8 +49,8 @@ wq_string_has_char() {
         return 0
     fi
 
-    CHECKCHAR=`echo "$1" | ${GREP} "$2" | ${WC} -l | ${TR} -d ' '`
-    if [ ${CHECKCHAR} -gt 0 ]; then
+    CHECK_CHAR=`echo "$1" | ${GREP} "$2" | ${WC} -l | ${TR} -d ' '`
+    if [ ${CHECK_CHAR} -gt 0 ]; then
         return 1
     fi
 
@@ -61,33 +61,33 @@ wq_string_has_char() {
 # -nv: basic option for simple message
 # -4: some site has ipv6 address, but no route of ipv6, so force using ipv4 only
 # --no-check-certificate: do not check ssl/cert for https:// url
-WGETOPTION="-nv -4 --no-check-certificate"
+WGET_BASE_OPTION="-nv -4 --no-check-certificate"
 
-# WGETUSERAGENT="Wget/1.12"  # default
-WGETUSERAGENT="Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-TW; rv:1.9.2.24) Gecko/20111103 Firefox/3.6.24 (.NET CLR 3.5.30729)"  # pretend windows browsers
+# USE_USER_AGENT="Wget/1.12"  # default
+USE_USER_AGENT="Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-TW; rv:1.9.2.24) Gecko/20111103 Firefox/3.6.24 (.NET CLR 3.5.30729)"  # pretend windows browsers
 
 # referer default none
-CLEANREFERER=1
+CLEAN_REFERER=1
 
 # outfile default none
-CLEANOUTFILE=1
+CLEAN_OUTFILE=1
 
 # check if do mkdir first
-MKDIRFIRST=0
+MKDIR_FIRST=0
 
 while [ ! -z "$1" ]; do
-    if [ ${CLEANREFERER} -gt 0 ]; then
-        WGETREFERER=""
+    if [ ${CLEAN_REFERER} -gt 0 ]; then
+        SET_REFERER=''
     fi
 
-    CLEANREFERER=0
+    CLEAN_REFERER=0
 
-    if [ ${CLEANOUTFILE} -gt 0 ]; then
-        WGETOUTFILE=""
+    if [ ${CLEAN_OUTFILE} -gt 0 ]; then
+        SET_OUTFILE=''
     fi
 
-    CLEANOUTFILE=0
-    CHECKOUTFILE=''
+    CLEAN_OUTFILE=0
+    USE_OUTFILE=''
 
     # avoid double-typed command
     if [ "wq" = "$1" -o "wq.sh" = "$1" -o "$0" = "$1" ]; then
@@ -96,9 +96,9 @@ while [ ! -z "$1" ]; do
     fi
 
     # check referer
-    CHECKREFERER=`echo "$1" | ${CUT} -c 1-10`
-    if [ '--referer=' = "${CHECKREFERER}" ]; then
-        WGETREFERER="$1"
+    CHECK_REFERER=`echo "$1" | ${CUT} -c 1-10`
+    if [ '--referer=' = "${CHECK_REFERER}" ]; then
+        SET_REFERER="$1"
         shift
         continue
     fi
@@ -126,7 +126,7 @@ while [ ! -z "$1" ]; do
         fi
 
         if [ -d "$1" ]; then
-            MKDIRFIRST=1
+            MKDIR_FIRST=1
             cd "$1"
 
             echo "CD $1"
@@ -144,8 +144,8 @@ while [ ! -z "$1" ]; do
 
         wq_get_filename "$2"
 
-        WGETOUTFILE="-O ${CHECKOUTFILE}"
-        CLEANOUTFILE=1
+        SET_OUTFILE="-O ${USE_OUTFILE}"
+        CLEAN_OUTFILE=1
         shift
         shift
         continue
@@ -166,90 +166,51 @@ while [ ! -z "$1" ]; do
     . ~/work/mirror_script/wq/parse_url.sh "${URL}"
 
 
-    # TODO: imgur.com
+    #################################################################
+    # TYPE: url is page, get inside pic url                         #
+    #################################################################
+
+    # TODO: imgur.com page
     # if url: http://imgur.com/Hwrk1Vl
-    # get pic: http://i.imgur.com/Hwrk1Vl.jpg
-    # check jpg from http://imgur.com/Hwrk1Vl content ?
+    #   get pic: http://i.imgur.com/Hwrk1Vl.jpg (maybe [jJ][Pp][Gg] [Gg][Ii][Ff] [Pp][Nn][Gg])
+    #   check pic url from http://imgur.com/Hwrk1Vl content ?
+
+    # TODO: ppt.cc page
+    # if url: http://ppt.cc/4Uu-
+    #   get pic: http://http://ppt.cc/4Uu-@.jpg (maybe [jJ][Pp][Gg] [Gg][Ii][Ff] [Pp][Nn][Gg])
+    #   check pic url from http://ppt.cc/4Uu- content ?
 
 
-    # xuite pic
-    # if url: http://5.share.photo.xuite.net/big.max/1580be0/5076492/1041956820_o.jpg
-    # auto set referer to http://blog.xuite.net/big.max
-    if [ 'photo' = "${HOSTNAMEC}" -a 'xuite' = "${HOSTNAMED}" -a 'net' = "${HOSTNAMEE}" ]; then
-        WGETREFERER="--referer=http://blog.xuite.net/${PATHA}"
-        CLEANREFERER=1
-    fi
+    #################################################################
+    # TYPE: url is pic, need referer link                           #
+    #################################################################
 
-    # ppt.cc
-    # 1. pic file
-    #    if url: http://ppt.cc/4Uu-@.jpg without referer
-    #    auto set referer to http://ppt.cc/4Uu-
-    # 2. get pic file
-    #    if url: http://ppt.cc/4Uu-
-    #    get pic: http://http://ppt.cc/4Uu-@.jpg (maybe [jJ][Pp][Gg] [Gg][Ii][Ff] [Pp][Nn][Gg])
-    #    check jpg from http://ppt.cc/4Uu- content ?
+    # ppt.cc pic
+    # if url: http://ppt.cc/4Uu-@.jpg without referer
+    #   set referer to http://ppt.cc/4Uu-
     if [ 'ppt.cc' = "${HOSTNAME}" ]; then
         wq_string_has_char "${URL}" '@'
         if [ "$?" -gt 0 ]; then
             TMPREFERER=`echo "${URL}" | ${AWK} -F@ '{printf("%s",$1);}'`
 
-            WGETREFERER="--referer=${TMPREFERER}"
-            CLEANREFERER=1
-        else
-            echo 'TODO'
-            shift
-            continue
+            SET_REFERER="--referer=${TMPREFERER}"
+            CLEAN_REFERER=1
         fi
     fi
 
-
-    # fastpic image
-    # if url: http://www.fastpic.jp/images.php?file=4117028328.jpg
-    # save file into 4117028328.jpg or 4117028328.jpg.N
-    if [ 'www.fastpic.jp' = "${HOSTNAME}" -a 'images.php' = "${FILENAME}" -a 'file' = "${ARGAN}" ]; then
-        wq_get_filename "${ARGAV}"
-
-        WGETOUTFILE="-O ${CHECKOUTFILE}"
-        CLEANOUTFILE=1
+    # xuite pic
+    # if url: http://5.share.photo.xuite.net/big.max/1580be0/5076492/1041956820_o.jpg
+    #   set referer to http://blog.xuite.net/big.max
+    if [ 'photo' = "${HOSTNAMEC}" -a 'xuite' = "${HOSTNAMED}" -a 'net' = "${HOSTNAMEE}" ]; then
+        SET_REFERER="--referer=http://blog.xuite.net/${PATHA}"
+        CLEAN_REFERER=1
     fi
 
-
-    # facebook oh/oe pic
-    # if url: https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-xpf1/v/t1.0-9/10489954_760151634035462_3295158177063468216_n.jpg?oh=9d34618b6532a1451cf7816ad38811bd&oe=54599FA2&__gda__=1413965256_cd34923b97f4eb4ad7bb4f1394f9efdb
-    # save file into 10489954_760151634035462_3295158177063468216_n.jpg or 10489954_760151634035462_3295158177063468216_n.jpg.N
-    if [ 'oh' = "${ARGAN}" -a 'oe' = "${ARGBN}" ]; then
-        wq_get_filename "${FILENAME}"
-
-        WGETOUTFILE="-O ${CHECKOUTFILE}"
-        CLEANOUTFILE=1
-    fi
-
-
-    # facebook dl pic
-    # if url: https://scontent-a-nrt.xx.fbcdn.net/hphotos-xpf1/t31.0-8/1272345_163157470544271_1358342518_o.jpg?dl=1
-    # save file into 1272345_163157470544271_1358342518_o.jpg or 1272345_163157470544271_1358342518_o.jpg.N
-    if [ 'dl' = "${ARGAN}" ]; then
-        wq_get_filename "${FILENAME}"
-
-        WGETOUTFILE="-O ${CHECKOUTFILE}"
-        CLEANOUTFILE=1
-    fi
-
-
-    # facebook limited width/height pic
-    # if url: https://fbcdn-sphotos-e-a.akamaihd.net/hphotos-ak-xpa1/t31.0-8/s960x960/10514307_1450320061902023_7392152021835748963_o.jpg
-    #         https://scontent-b-nrt.xx.fbcdn.net/hphotos-xpa1/t1.0-9/p240x240/10313489_415628195241707_2675330737228852867_n.jpg
-    # update url: https://fbcdn-sphotos-e-a.akamaihd.net/hphotos-ak-xpa1/t31.0-8/10514307_1450320061902023_7392152021835748963_o.jpg
-    CHECKFBS=`echo "${URL}" | ${GREP} '/[ps][0-9][0-9]*x[0-9][0-9]*/' | ${WC} -l | ${TR} -d ' '`
-    if [ ${CHECKFBS} -gt 0 ]; then
-        URL=`echo -n "${URL}" | ${SED} 's/\/[ps][0-9][0-9]*x[0-9][0-9]*\//\//g'`
-    fi
-
-
-    # pixiv: get pixture with faked referer
-    #   url: http://i2.pixiv.net/img20/img/stargeyser/10931186.jpg?1277014586
-    #   ref: http://www.pixiv.net/member_illust.php?mode=big&illust_id=10931186
+    # pixiv pic
+    # if url: http://i2.pixiv.net/img20/img/stargeyser/10931186.jpg?1277014586
+    #   set referer to http://www.pixiv.net/member_illust.php?mode=big&illust_id=10931186
     if [ 'pixiv' = "${HOSTNAMEB}" -a 'net' = "${HOSTNAMEC}" ]; then
+        # FIXME: get filename from parse_url variables
         FILEID=`echo "${FILENAME}" | ${AWK} -F. '{printf("%d",$1);}'`
 
         # if url has ? , remove all after ?
@@ -257,65 +218,119 @@ while [ ! -z "$1" ]; do
             URL=`echo "${URL}" | ${AWK} -F? '{printf("%s",$1);}'`
         fi
 
-        WGETREFERER="--referer=http://www.pixiv.net/member_illust.php?mode=big&illust_id=${FILEID}"
-        CLEANREFERER=1
+        SET_REFERER="--referer=http://www.pixiv.net/member_illust.php?mode=big&illust_id=${FILEID}"
+        CLEAN_REFERER=1
+    fi
+
+
+    #################################################################
+    # TYPE: url is pic, set saved filename                          #
+    #################################################################
+
+    # facebook dl pic
+    # if url: https://scontent-a-nrt.xx.fbcdn.net/hphotos-xpf1/t31.0-8/1272345_163157470544271_1358342518_o.jpg?dl=1
+    #   save file into 1272345_163157470544271_1358342518_o.jpg(.N)
+    if [ 'dl' = "${ARGAN}" ]; then
+        wq_get_filename "${FILENAME}"
+
+        SET_OUTFILE="-O ${USE_OUTFILE}"
+        CLEAN_OUTFILE=1
+    fi
+
+    # facebook oh/oe pic
+    # if url: https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-xpf1/v/t1.0-9/10489954_760151634035462_3295158177063468216_n.jpg?oh=9d34618b6532a1451cf7816ad38811bd&oe=54599FA2&__gda__=1413965256_cd34923b97f4eb4ad7bb4f1394f9efdb
+    #   save file into 10489954_760151634035462_3295158177063468216_n.jpg(.N)
+    if [ 'oh' = "${ARGAN}" -a 'oe' = "${ARGBN}" ]; then
+        wq_get_filename "${FILENAME}"
+
+        SET_OUTFILE="-O ${USE_OUTFILE}"
+        CLEAN_OUTFILE=1
+    fi
+
+    # fastpic pic
+    # if url: http://www.fastpic.jp/images.php?file=4117028328.jpg
+    #   save file into 4117028328.jpg(.N)
+    if [ 'www.fastpic.jp' = "${HOSTNAME}" -a 'images.php' = "${FILENAME}" -a 'file' = "${ARGAN}" ]; then
+        wq_get_filename "${ARGAV}"
+
+        SET_OUTFILE="-O ${USE_OUTFILE}"
+        CLEAN_OUTFILE=1
+    fi
+
+
+    #################################################################
+    # TYPE: url is pic, replace url                                 #
+    #################################################################
+
+    # facebook limited width/height pic
+    # if url: https://fbcdn-sphotos-e-a.akamaihd.net/hphotos-ak-xpa1/t31.0-8/s960x960/10514307_1450320061902023_7392152021835748963_o.jpg
+    #         https://scontent-b-nrt.xx.fbcdn.net/hphotos-xpa1/t1.0-9/p240x240/10313489_415628195241707_2675330737228852867_n.jpg
+    #   replace url: https://fbcdn-sphotos-e-a.akamaihd.net/hphotos-ak-xpa1/t31.0-8/10514307_1450320061902023_7392152021835748963_o.jpg
+    CHECKFBS=`echo "${URL}" | ${GREP} '/[ps][0-9][0-9]*x[0-9][0-9]*/' | ${WC} -l | ${TR} -d ' '`
+    if [ ${CHECKFBS} -gt 0 ]; then
+        URL=`echo -n "${URL}" | ${SED} 's/\/[ps][0-9][0-9]*x[0-9][0-9]*\//\//g'`
     fi
 
 
     # get file first
-    ${WGET} ${WGETOUTFILE} ${WGETOPTION} --user-agent="${WGETUSERAGENT}" ${WGETREFERER} "${URL}"
+    ${WGET} ${SET_OUTFILE} ${WGET_BASE_OPTION} --user-agent="${USE_USER_AGENT}" ${SET_REFERER} "${URL}"
 
     # if filesize is 0, remove it
-    if [ ! -z "${CHECKOUTFILE}" -a -f "${CHECKOUTFILE}" -a ! -s "${CHECKOUTFILE}" ]; then
-        ${RM} "${CHECKOUTFILE}"
+    if [ ! -z "${USE_OUTFILE}" -a -f "${USE_OUTFILE}" -a ! -s "${USE_OUTFILE}" ]; then
+        ${RM} "${USE_OUTFILE}"
     fi
 
-    # pattern: tumblr image
-    # url pattern:
+
+    #################################################################
+    # TYPE: url is pic, get more pics by changing url               #
+    #################################################################
+
+    # tumblr pic
+    # if url:
     #  1. http://25.media.tumblr.com/409bc297bb66a375ac2c85e78d0e387e/tumblr_miu9svkSvK1qk5m6io8_250.jpg
     #  2. http://24.media.tumblr.com/tumblr_kt065fJHvm1qzkcgao1_r1_1280.jpg
     #  3. http://24.media.tumblr.com/tumblr_lp2h0dKA8s1qzn3jqo1_500.jpg
     #  4. TBD
     if [ 'media' = "${HOSTNAMEB}" -a 'tumblr' = "${HOSTNAMEC}" -a 'com' = "${HOSTNAMED}" ]; then
         if [ -z "${PATHB}" ]; then
-            # pattern 2 or 3
-            PATH=''
+            # url 2 or 3
+            MORE_PATH=''
         else
-            # pattern 1
-            PATH="${PATHA}/"
+            # url 1
+            MORE_PATH="${PATHA}/"
         fi
 
-        # check pattern 2
-        FILENAMESIZE=`echo "${FILENAME}" | ${AWK} -F_ '{printf("%s",$4);}'`
-        if [ -z "${FILENAMESIZE}" ]; then
-            # pattern 3
-            FILENAMEBODY=`echo "${FILENAME}" | ${AWK} -F_ '{printf("%s_%s",$1,$2);}'`
+        # check url 2
+        FILENAME_SIZE=`echo "${FILENAME}" | ${AWK} -F_ '{printf("%s",$4);}'`
+        if [ -z "${FILENAME_SIZE}" ]; then
+            # url 3
+            FILENAME_BODY=`echo "${FILENAME}" | ${AWK} -F_ '{printf("%s_%s",$1,$2);}'`
         else
-            # pattern 2
-            FILENAMEBODY=`echo "${FILENAME}" | ${AWK} -F_ '{printf("%s_%s_%s",$1,$2,$3);}'`
+            # url 2
+            FILENAME_BODY=`echo "${FILENAME}" | ${AWK} -F_ '{printf("%s_%s_%s",$1,$2,$3);}'`
         fi
 
         # try get bigger size: 1280 1024 800 600
         # maybe there are more bigger size in the future
-        for SIZE in 1280 1024 800 600; do
-            LOCALURL=`echo -n "${PROTOCOL}://${HOSTNAME}/${PATH}${FILENAMEBODY}_${SIZE}.${FILENAMEEXT}"`
+        for MORE_SIZE in 1280 1024 800 600; do
+            MORE_URL=`echo -n "${PROTOCOL}://${HOSTNAME}/${MORE_PATH}${FILENAME_BODY}_${MORE_SIZE}.${FILENAMEEXT}"`
 
-            wq_get_filename "${FILENAMEBODY}_${SIZE}.${FILENAMEEXT}"
+            wq_get_filename "${FILENAME_BODY}_${MORE_SIZE}.${FILENAMEEXT}"
 
-            WGETOUTFILE="-O ${CHECKOUTFILE}"
-            CLEANOUTFILE=1
+            SET_OUTFILE="-O ${USE_OUTFILE}"
+            CLEAN_OUTFILE=1
 
-            ${WGET} ${WGETOUTFILE} ${WGETOPTION} --user-agent="${WGETUSERAGENT}" ${WGETREFERER} "${LOCALURL}"
+            ${WGET} ${SET_OUTFILE} ${WGET_BASE_OPTION} --user-agent="${USE_USER_AGENT}" ${SET_REFERER} "${MORE_URL}"
 
             # if filesize is 0, remove it
-            if [ ! -z "${CHECKOUTFILE}" -a -f "${CHECKOUTFILE}" -a ! -s "${CHECKOUTFILE}" ]; then
-                ${RM} "${CHECKOUTFILE}"
+            if [ ! -z "${USE_OUTFILE}" -a -f "${USE_OUTFILE}" -a ! -s "${USE_OUTFILE}" ]; then
+                ${RM} "${USE_OUTFILE}"
                 echo "RE-GET ${URL}"
                 continue
             fi
 
             # if get a file, skip smaller size
-            if [ -s "${CHECKOUTFILE}" ]; then
+            if [ -s "${USE_OUTFILE}" ]; then
                 break
             fi
         done
@@ -324,7 +339,9 @@ while [ ! -z "$1" ]; do
     shift
 done
 
-if [ ${MKDIRFIRST} -gt 0 ]; then
+
+# auto remove duplicate files
+if [ ${MKDIR_FIRST} -gt 0 ]; then
     ~/work/mirror_script/wq/rmdotdup.sh
     ~/work/mirror_script/wq/rmdirdup.sh ../
 
