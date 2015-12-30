@@ -370,6 +370,12 @@ while [ ! -z "$1" ]; do
         done
     fi
 
+    # TODO: twimg pic
+    # if url: http://pbs.twimg.com/media/CRwQEeDUcAAR_Hd.jpg
+    #   get http://pbs.twimg.com/media/CRwQEeDUcAAR_Hd.jpg:orig
+    #   compare CRwQEeDUcAAR_Hd.jpg and CRwQEeDUcAAR_Hd.jpg:large
+    #   if same, remove CRwQEeDUcAAR_Hd.jpg:orig else remove CRwQEeDUcAAR_Hd.jpg
+
     shift
 done
 
