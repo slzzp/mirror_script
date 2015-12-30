@@ -279,6 +279,16 @@ while [ ! -z "$1" ]; do
         CLEAN_OUTFILE=1
     fi
 
+    # imgs.cc pic
+    # if url: http://s1.imgs.cc/img/Av3i5tq.jpg?jtq
+    #   save file into Av3i5tq.jpg(.N)
+    if [ 'imgs' = "${HOSTNAMEB}" -a 'cc' = "${HOSTNAMEC}" ]; then
+        wq_get_filename "${FILENAME}"
+
+        SET_OUTFILE="-O ${USE_OUTFILE}"
+        CLEAN_OUTFILE=1
+    fi
+
     # TODO: miupix pic
     # if url: http://miupix.cc/di/64XFQ7/uploadFromiPhone.jpg
     #   save file into miupix.cc_di-64XFQ7.jpg(.N)
