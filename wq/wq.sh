@@ -279,6 +279,10 @@ while [ ! -z "$1" ]; do
         CLEAN_OUTFILE=1
     fi
 
+    # TODO: twavtv pic
+    # if url: http://www.twavtv.com/attachment.php?aid=55082&k=ddf90b96b06a8f3894dea95c508fc5db&t=1409126810&noupdate=yes&sid=93af292dZWRYLMK3GzihH%2FeXvtEbkLpy1JhAmPWk07QJs7I
+    #   save file into 55082_ddf90b96b06a8f3894dea95c508fc5db_1409126810_93af292dZWRYLMK3GzihH%2FeXvtEbkLpy1JhAmPWk07QJs7I.jpg(.N)
+
     # TODO: xuite blog pic
     # if url: http://3.blog.xuite.net/3/0/5/2/232745425/blog_2940195/txt/242605303/2.jpg
     #   save file into 232745425_blog_2940195_242605303_2.jpg(.N)
