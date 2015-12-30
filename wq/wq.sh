@@ -287,6 +287,10 @@ while [ ! -z "$1" ]; do
         URL=`echo -n "${URL}" | ${SED} 's/\/[ps][0-9][0-9]*x[0-9][0-9]*\//\//g'`
     fi
 
+    # TODO: udn pic
+    # if url: http://pgw.udn.com.tw/gw/photo.php?u=http://uc.udn.com.tw/photo/2015/10/09/realtime/1392155.jpg
+    #   replace url: http://uc.udn.com.tw/photo/2015/10/09/realtime/1392155.jpg
+
 
     # get file first
     ${WGET} ${SET_OUTFILE} ${WGET_BASE_OPTION} --user-agent="${USE_USER_AGENT}" ${SET_REFERER} "${URL}"
