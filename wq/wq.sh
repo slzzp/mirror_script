@@ -269,6 +269,16 @@ while [ ! -z "$1" ]; do
         CLEAN_OUTFILE=1
     fi
 
+    # TODO: googleusercontent / twavtv pic
+    # if url: http://ps.googleusercontent.com/h/www.twavtv.com/classes/image-generator.php?hash=c00698e4241a58820508805410157567&width=600&image=/attachments/month_1207/1207ae39da544f8f702e89596696bad05cea.jpg
+    #   save file into 1207ae39da544f8f702e89596696bad05cea.jpg(.N)
+    if [ 'ps.googleusercontent.com' = "${HOSTNAME}" -a 'h' = "${PATHA}" -a 'www.twavtv.com' = "${PATHB}" -a 'image-generator.php?hash=c00698e4241a58820508805410157567&width=600&image=' = "${PATHD}" ]; then
+        wq_get_filename "${FILENAME}"
+
+        SET_OUTFILE="-O ${CHECK_OUTFILE}"
+        CLEAN_OUTFILE=1
+    fi
+
     # TODO: xuite blog pic
     # if url: http://3.blog.xuite.net/3/0/5/2/232745425/blog_2940195/txt/242605303/2.jpg
     #   save file into 232745425_blog_2940195_242605303_2.jpg(.N)
