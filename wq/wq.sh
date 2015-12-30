@@ -30,6 +30,7 @@ wq_get_filename() {
                 break
             fi
 
+            # file exist but file size is 0, rm it
             if [ ! -s "${CHECKOUTFILE}" ]; then
                 ${RM} "${CHECKOUTFILE}"
                 break
@@ -309,6 +310,8 @@ while [ ! -z "$1" ]; do
             # if filesize is 0, remove it
             if [ ! -z "${CHECKOUTFILE}" -a -f "${CHECKOUTFILE}" -a ! -s "${CHECKOUTFILE}" ]; then
                 ${RM} "${CHECKOUTFILE}"
+                echo "RE-GET ${URL}"
+                continue
             fi
 
             # if get a file, skip smaller size
