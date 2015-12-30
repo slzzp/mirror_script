@@ -235,6 +235,10 @@ while [ ! -z "$1" ]; do
     # TYPE: url is pic, set saved filename                          #
     #################################################################
 
+    # TODO: cloudfront pic
+    # if url: https://dki5ev61kmqpi.cloudfront.net/da02022e02b68ca890a343d6f636f21c3dc34516/687474703a2f2f692e696d6775722e636f6d2f3953716c4167712e6a7067
+    #   save file into da02022e02b68ca890a343d6f636f21c3dc34516_687474703a2f2f692e696d6775722e636f6d2f3953716c4167712e6a7067.jpg(.N)
+
     # facebook dl pic
     # if url: https://scontent-a-nrt.xx.fbcdn.net/hphotos-xpf1/t31.0-8/1272345_163157470544271_1358342518_o.jpg?dl=1
     #   save file into 1272345_163157470544271_1358342518_o.jpg(.N)
