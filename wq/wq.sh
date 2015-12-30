@@ -162,27 +162,7 @@ while [ ! -z "$1" ]; do
 
 
     # parse url
-    PROTOCOL=`echo "${URL}" | ${AWK} -F: '{printf("%s",$1);}'`
-    HOSTNAME=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$3);}'`
-    HOSTNAMEA=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$1);}'`
-    HOSTNAMEB=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$2);}'`
-    HOSTNAMEC=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$3);}'`
-    HOSTNAMED=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$4);}'`
-    HOSTNAMEE=`echo "${HOSTNAME}" | ${AWK} -F. '{printf("%s",$5);}'`
-    PATHA=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$4);}'`
-    PATHB=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$5);}'`
-    PATHC=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$6);}'`
-    PATHD=`echo "${URL}" | ${AWK} -F/ '{printf("%s",$7);}'`
-    FILENAMEARG=`${BASENAME} "${URL}"`
-    FILENAME=`echo "${FILENAMEARG}" | ${AWK} -F? '{printf("%s",$1);}'`
-    FILENAMEEXT=`echo "${FILENAME}" | ${AWK} -F. '{printf("%s", $NF);}'`
-    ARGS=`echo "${FILENAMEARG}" | ${AWK} -F? '{printf("%s",$2);}'`
-    ARGA=`echo "${ARGS}" | ${AWK} -F\& '{printf("%s",$1);}'`
-    ARGAN=`echo "${ARGA}" | ${AWK} -F= '{printf("%s",$1);}'`
-    ARGAV=`echo "${ARGA}" | ${AWK} -F= '{printf("%s",$2);}'`
-    ARGB=`echo "${ARGS}" | ${AWK} -F\& '{printf("%s",$2);}'`
-    ARGBN=`echo "${ARGB}" | ${AWK} -F= '{printf("%s",$1);}'`
-    ARGBV=`echo "${ARGB}" | ${AWK} -F= '{printf("%s",$2);}'`
+    . ~/work/mirror_script/wq/parse_url.sh "${URL}"
 
 
     # TODO: imgur.com
