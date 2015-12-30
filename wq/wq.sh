@@ -325,6 +325,10 @@ while [ ! -z "$1" ]; do
         URL=`echo -n "${URL}" | ${SED} 's/\/[ps][0-9][0-9]*x[0-9][0-9]*\//\//g'`
     fi
 
+    # TODO: taiwanacgn.net pic
+    # if url: https://taiwanacgn.net/wp-content/uploads/2015/09/431387eb7262e1cfc79b125eb8a67c60451.jpg
+    #   replace url: http://taiwanacgn.net/wp-content/uploads/2015/09/431387eb7262e1cfc79b125eb8a67c60451.jpg
+
     # TODO: udn pic
     # if url: http://pgw.udn.com.tw/gw/photo.php?u=http://uc.udn.com.tw/photo/2015/10/09/realtime/1392155.jpg
     #   replace url: http://uc.udn.com.tw/photo/2015/10/09/realtime/1392155.jpg
