@@ -279,6 +279,10 @@ while [ ! -z "$1" ]; do
         CLEAN_OUTFILE=1
     fi
 
+    # TODO: miupix pic
+    # if url: http://miupix.cc/di/64XFQ7/uploadFromiPhone.jpg
+    #   save file into miupix.cc_di-64XFQ7.jpg(.N)
+
     # TODO: twavtv pic
     # if url: http://www.twavtv.com/attachment.php?aid=55082&k=ddf90b96b06a8f3894dea95c508fc5db&t=1409126810&noupdate=yes&sid=93af292dZWRYLMK3GzihH%2FeXvtEbkLpy1JhAmPWk07QJs7I
     #   save file into 55082_ddf90b96b06a8f3894dea95c508fc5db_1409126810_93af292dZWRYLMK3GzihH%2FeXvtEbkLpy1JhAmPWk07QJs7I.jpg(.N)
