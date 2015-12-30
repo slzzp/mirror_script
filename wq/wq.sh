@@ -185,6 +185,14 @@ while [ ! -z "$1" ]; do
     # TYPE: url is pic, need referer link                           #
     #################################################################
 
+    # huaijiuyingyuan.com pic
+    # if url: http://huaijiuyingyuan.com/bbs/UploadFile/2013-6/201361521555920609.jpg
+    #   set referer to http://huaijiuyingyuan.com
+    if [ 'huaijiuyingyuan.com' = "${HOSTNAME}" ]; then
+        SET_REFERER="--referer=http://huaijiuyingyuan.com"
+        CLEAN_REFERER=1
+    fi
+
     # ppt.cc pic
     # if url: http://ppt.cc/4Uu-@.jpg without referer
     #   set referer to http://ppt.cc/4Uu-
