@@ -283,6 +283,16 @@ while [ ! -z "$1" ]; do
     # if url: http://miupix.cc/di/64XFQ7/uploadFromiPhone.jpg
     #   save file into miupix.cc_di-64XFQ7.jpg(.N)
 
+    # pimg pic
+    # if url: https://pic.pimg.tw/raindog/1433695157-4225156458.jpg?v=1433695158
+    #   save flie into 1433695157-4225156458.jpg(.N)
+    if [ 'pic.pimg.tw' = "${HOSTNAME}" -a 'v' = "${ARGAN}" ]; then
+        wq_get_filename "${FILENAME}"
+
+        SET_OUTFILE="-O ${USE_OUTFILE}"
+        CLEAN_OUTFILE=1
+    fi
+
     # pttbook pic
     # if url: http://cdn.pttbook.com/zhtw/c11477/Image/16f44bfd91d64ad2922b5349d9beb994.jpg%3Fbqt
     #   save file into 16f44bfd91d64ad2922b5349d9beb994.jpg(.N)
