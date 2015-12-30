@@ -275,7 +275,7 @@ while [ ! -z "$1" ]; do
     if [ 'ps.googleusercontent.com' = "${HOSTNAME}" -a 'h' = "${PATHA}" -a 'www.twavtv.com' = "${PATHB}" -a 'image-generator.php?hash=c00698e4241a58820508805410157567&width=600&image=' = "${PATHD}" ]; then
         wq_get_filename "${FILENAME}"
 
-        SET_OUTFILE="-O ${CHECK_OUTFILE}"
+        SET_OUTFILE="-O ${USE_OUTFILE}"
         CLEAN_OUTFILE=1
     fi
 
