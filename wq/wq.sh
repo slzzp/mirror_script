@@ -199,9 +199,9 @@ while [ ! -z "$1" ]; do
     if [ 'ppt.cc' = "${HOSTNAME}" ]; then
         wq_string_has_char "${URL}" '@'
         if [ "$?" -gt 0 ]; then
-            TMPREFERER=`echo "${URL}" | ${AWK} -F@ '{printf("%s",$1);}'`
+            TMP_REFERER=`echo "${URL}" | ${AWK} -F@ '{printf("%s",$1);}'`
 
-            SET_REFERER="--referer=${TMPREFERER}"
+            SET_REFERER="--referer=${TMP_REFERER}"
             CLEAN_REFERER=1
         fi
     fi
