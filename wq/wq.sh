@@ -9,12 +9,16 @@ fi
 # external commands
 AWK="/usr/bin/awk"
 BASENAME="/usr/bin/basename"
+CURL="/usr/bin/curl"
 CUT="/usr/bin/cut"
+DATE="/bin/date"
 EXPR="/usr/bin/expr"
 GREP="/bin/grep"
 LS="/bin/ls"
 MKDIR="/bin/mkdir"
+MV="/bin/mv"
 RM="/bin/rm"
+RMDIR="/bin/rmdir"
 SED="/bin/sed"
 TR="/usr/bin/tr"
 WC="/usr/bin/wc"
@@ -102,6 +106,7 @@ while [ ! -z "$1" ]; do
         shift
         continue
     fi
+
 
     # set dir
     if [ '-d' = "$1" ]; then
@@ -344,8 +349,38 @@ while [ ! -z "$1" ]; do
     #   replace url: http://uc.udn.com.tw/photo/2015/10/09/realtime/1392155.jpg
 
 
+    # check if using curl
+    USE_CURL=`echo "${URL}" | ${GREP} -P "\[[0-9]+-[0-9]+\]" | ${WC} -l | ${TR} -d ' '`
+
     # get file first
-    ${WGET} ${SET_OUTFILE} ${WGET_BASE_OPTION} --user-agent="${USE_USER_AGENT}" ${SET_REFERER} "${URL}"
+    if [ ${USE_CURL} -gt 0 ]; then
+        TMP_FILECOUNT=`${LS} | ${WC} -l | ${TR} -d ' '`
+        TMP_DIRNAME=tmp_`${DATE} "+%s"`
+
+        if [ ${TMP_FILECOUNT} -gt 0 ]; then
+            ${MKDIR} -p ${TMP_DIRNAME}
+            cd ${TMP_DIRNAME}
+        fi
+
+        ${CURL} -O "${URL}"
+
+        if [ ${TMP_FILECOUNT} -gt 0 ]; then
+            cd ..
+
+            ~/work/mirror_script/wq/rmdirdup.sh ${TMP_DIRNAME}
+
+            ${RMDIR} ${TMP_DIRNAME}
+
+            if [ -d "${TMP_DIRNAME}" ]; then
+                echo "!! DIFF !! DIFF !! DIFF !! DIFF !! DIFF !! DIFF !! DIFF !!"
+            fi
+        fi
+
+        shift
+        continue
+    else
+        ${WGET} ${SET_OUTFILE} ${WGET_BASE_OPTION} --user-agent="${USE_USER_AGENT}" ${SET_REFERER} "${URL}"
+    fi
 
     # if filesize is 0, remove it
     if [ ! -z "${USE_OUTFILE}" -a -f "${USE_OUTFILE}" -a ! -s "${USE_OUTFILE}" ]; then
@@ -397,6 +432,7 @@ while [ ! -z "$1" ]; do
             # if filesize is 0, remove it
             if [ ! -z "${USE_OUTFILE}" -a -f "${USE_OUTFILE}" -a ! -s "${USE_OUTFILE}" ]; then
                 ${RM} "${USE_OUTFILE}"
+
                 echo "RE-GET ${URL}"
                 continue
             fi
