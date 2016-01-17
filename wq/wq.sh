@@ -466,8 +466,8 @@ done
 
 # auto remove duplicate files
 if [ ${MKDIR_FIRST} -gt 0 ]; then
-    ~/work/mirror_script/wq/rmdotdup.sh
     ~/work/mirror_script/wq/rmdirdup.sh ../
+    ~/work/mirror_script/wq/rmdotdup.sh
 
     if [ -d '../../ad9' ]; then
         ~/work/mirror_script/wq/rmdirdup.sh ../../ad9/
