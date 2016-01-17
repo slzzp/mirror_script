@@ -274,6 +274,16 @@ while [ ! -z "$1" ]; do
         CLEAN_OUTFILE=1
     fi
 
+    # giphy pic
+    # if url: https://media.giphy.com/media/3o7rbUin16uyk59yec/giphy.gif
+    #   save file into 3o7rbUin16uyk59yec_giphy.gif
+    if [ 'media.giphy.com' = "${HOSTNAME}" -a 'media' = "${PATHA}" -a 'giphy.gif' = "${FILENAME}" ]; then
+        wq_get_filename "${PATHB}_${FILENAME}"
+
+        SET_OUTFILE="-O ${USE_OUTFILE}"
+        CLEAN_OUTFILE=1
+    fi
+
     # TODO: googleusercontent / twavtv pic
     # if url: http://ps.googleusercontent.com/h/www.twavtv.com/classes/image-generator.php?hash=c00698e4241a58820508805410157567&width=600&image=/attachments/month_1207/1207ae39da544f8f702e89596696bad05cea.jpg
     #   save file into 1207ae39da544f8f702e89596696bad05cea.jpg(.N)
