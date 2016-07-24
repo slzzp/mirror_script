@@ -294,6 +294,10 @@ while [ ! -z "$1" ]; do
         CLEAN_OUTFILE=1
     fi
 
+    # TODO: googleusercontent pic
+    # if url: https://lh4.googleusercontent.com/-KdAEFZ8de_U/Vtq0ML9C2nI/AAAAAAAACAA/vQN_HmFaBKg/s0/2016-03-05.jpg
+    #   save file into KdAEFZ8de_U_Vtq0ML9C2nI_AAAAAAAACAA_vQN_HmFaBKg_2016-03-05.jpg
+
     # TODO: googleusercontent / twavtv pic
     # if url: http://ps.googleusercontent.com/h/www.twavtv.com/classes/image-generator.php?hash=c00698e4241a58820508805410157567&width=600&image=/attachments/month_1207/1207ae39da544f8f702e89596696bad05cea.jpg
     #   save file into 1207ae39da544f8f702e89596696bad05cea.jpg(.N)
