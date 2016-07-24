@@ -284,6 +284,16 @@ while [ ! -z "$1" ]; do
         CLEAN_OUTFILE=1
     fi
 
+    # pstatp pic
+    # if url: http://p3.pstatp.com/large/92d0004a2a7bce80852
+    #   save file into 92d0004a2a7bce80852_large.jpg
+    if [ 'pstatp' = "${HOSTNAMEB}" -a 'com' = "${HOSTNAMEC}" ]; then
+        wq_get_filename "${FILENAME}_${PATHA}.jpg"
+
+        SET_OUTFILE="-O ${USE_OUTFILE}"
+        CLEAN_OUTFILE=1
+    fi
+
     # TODO: googleusercontent / twavtv pic
     # if url: http://ps.googleusercontent.com/h/www.twavtv.com/classes/image-generator.php?hash=c00698e4241a58820508805410157567&width=600&image=/attachments/month_1207/1207ae39da544f8f702e89596696bad05cea.jpg
     #   save file into 1207ae39da544f8f702e89596696bad05cea.jpg(.N)
