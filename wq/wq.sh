@@ -314,9 +314,15 @@ while [ ! -z "$1" ]; do
         CLEAN_OUTFILE=1
     fi
 
-    # TODO: miupix pic
+    # miupix pic
     # if url: http://miupix.cc/di/64XFQ7/uploadFromiPhone.jpg
     #   save file into miupix.cc_di-64XFQ7.jpg(.N)
+    if [ 'miupix.cc' = "${HOSTNAME}" ]; then
+        wq_get_filename "miupix_${PATHA}_${PATHB}.jpg"
+
+        SET_OUTFILE="-O ${USE_OUTFILE}"
+        CLEAN_OUTFILE=1
+    fi
 
     # pimg pic
     # if url: https://pic.pimg.tw/raindog/1433695157-4225156458.jpg?v=1433695158
