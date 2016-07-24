@@ -264,6 +264,10 @@ while [ ! -z "$1" ]; do
         CLEAN_OUTFILE=1
     fi
 
+    # TODO: facebook safeimage
+    # if url: https://external.xx.fbcdn.net/safe_image.php?d=AQA9hX2xGLwd2-S0&w=470&h=246&url=fbstaging%3A%2F%2Fgraph.facebook.com%2Fstaging_resources%2FMDExMDczNDY3NDE2MDQ0NzgzOjE5MjY1MTI5NTc%3D&cfs=1&upscale=1&sx=0&sy=51&sw=1034&sh=541
+    #
+
     # fastpic pic
     # if url: http://www.fastpic.jp/images.php?file=4117028328.jpg
     #   save file into 4117028328.jpg(.N)
