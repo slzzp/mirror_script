@@ -50,6 +50,14 @@ PATHA=`echo "${PARSEURL}" | ${AWK} -F/ '{printf("%s",$4);}'`
 PATHB=`echo "${PARSEURL}" | ${AWK} -F/ '{printf("%s",$5);}'`
 PATHC=`echo "${PARSEURL}" | ${AWK} -F/ '{printf("%s",$6);}'`
 PATHD=`echo "${PARSEURL}" | ${AWK} -F/ '{printf("%s",$7);}'`
+PATHE=`echo "${PARSEURL}" | ${AWK} -F/ '{printf("%s",$8);}'`
+PATHF=`echo "${PARSEURL}" | ${AWK} -F/ '{printf("%s",$9);}'`
+PATHG=`echo "${PARSEURL}" | ${AWK} -F/ '{printf("%s",$10);}'`
+PATHH=`echo "${PARSEURL}" | ${AWK} -F/ '{printf("%s",$11);}'`
+PATHI=`echo "${PARSEURL}" | ${AWK} -F/ '{printf("%s",$12);}'`
+PATHJ=`echo "${PARSEURL}" | ${AWK} -F/ '{printf("%s",$13);}'`
+PATHK=`echo "${PARSEURL}" | ${AWK} -F/ '{printf("%s",$14);}'`
+PATHL=`echo "${PARSEURL}" | ${AWK} -F/ '{printf("%s",$15);}'`
 
 FILENAMEARG=`${BASENAME} "${PARSEURL}"`
 FILENAME=`echo "${FILENAMEARG}" | ${AWK} -F? '{printf("%s",$1);}'`
