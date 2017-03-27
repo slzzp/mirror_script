@@ -9,6 +9,7 @@ fi
 # external commands
 AWK="/usr/bin/awk"
 CUT="/usr/bin/cut"
+EXPR="/usr/bin/expr"
 GREP="/bin/grep"
 TR="/usr/bin/tr"
 WC="/usr/bin/wc"
@@ -119,6 +120,42 @@ while [ ! -z "$1" ]; do
                 exit
             fi
         fi
+    fi
+
+    # if http://www.huanjue.net/show.php?aid=4082&page=73
+    # call wq -d huanjue_4627 'https://shengyijun.net/huanjue/5/4082/[001-074].jpg'
+    # notice: N000 rule
+    # if http://www.huanjue.net/show.php?aid=4000&page=47
+    # call wq -d huanjue_4000 'https://shengyijun.net/huanjue/4/4000/[001-048].jpg'
+    if [ 'www.huanjue.net' = "${HOSTNAME}" -a 'show.php' = "${FILENAME}" ]; then
+        if [ 'aid' = "${ARGAN}" -a 'page' = "${ARGBN}" ]; then
+            if [ 0 -eq `${EXPR} ${ARGAV} % 1000` ]; then
+                HUANJUEINDEX=`${EXPR} ${ARGAV} / 1000`
+            else
+                HUANJUEINDEX=`${EXPR} ${ARGAV} / 1000 + 1 `
+            fi
+
+            WQURL="https://shengyijun.net/huanjue/${HUANJUEINDEX}/${ARGAV}/[001-`${EXPR} ${ARGBV} + 1`].jpg"
+
+            cd ~/tmp/stockings
+            ~/work/mirror_script/wq/wq.sh -d "huanjue_${ARGAV}" ${WQURL}
+        fi
+
+        if [ 'aid' = "${ARGBN}" -a 'page' = "${ARGAN}" ]; then
+            if [ 0 -eq `${EXPR} ${ARGBV} % 1000` ]; then
+                HUANJUEINDEX=`${EXPR} ${ARGBV} / 1000`
+            else
+                HUANJUEINDEX=`${EXPR} ${ARGBV} / 1000 + 1 `
+            fi
+
+            WQURL="https://shengyijun.net/huanjue/${HUANJUEINDEX}/${ARGBV}/[001-`${EXPR} ${ARGAV} + 1`].jpg"
+
+            cd ~/tmp/stockings
+            ~/work/mirror_script/wq/wq.sh -d "huanjue_${ARGAV}" ${WQURL}
+        fi
+
+        echo ${URL}
+        exit
     fi
 
     if [ 'blog.livedoor.jp' = "${HOSTNAME}" ]; then
