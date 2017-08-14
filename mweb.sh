@@ -176,6 +176,37 @@ while [ ! -z "$1" ]; do
         exit
     fi
 
+    # if https://shengyijun.net/masheng/11/10465/032.jpg
+    #   from https://www.masheng.net/article-10465-11/
+    # call wq -d 10465 'https://shengyijun.net/masheng/11/10465/[001-032].jpg'
+    #                  'https://shengyijun.cc/masheng/11/10465/[001-032].jpg'
+    # notice: N000 rule
+    # if https://shengyijun.net/masheng/10/10000/040.jpg
+    # call wq -d 10000 'https://shengyijun.net/masheng/10/10000/[001-040].jpg'
+    if [ 'shengyijun.net' = "${HOSTNAME}" -a 'masheng' = "${PATHA}" ]; then
+        ${MKDIR} -p ~/tmp/stockings/masheng.net
+        cd ~/tmp/stockings/masheng.net
+
+        if [ 0 -eq `${EXPR} ${PATHC} % 1000` ]; then
+            HUANJUEINDEX=`${EXPR} ${PATHC} / 1000`
+        else
+            HUANJUEINDEX=`${EXPR} ${PATHC} / 1000 + 1 `
+        fi
+
+        WQURL="https://shengyijun.net/masheng/${HUANJUEINDEX}/${PATHC}/[001-${FILENAMEMAIN}].jpg"
+
+        if [ ! -d "${PATHC}" ]; then
+          ~/work/mirror_script/wq/wq.sh -d "${PATHC}" ${WQURL}
+
+          if [ -d "${PATHC}no" ]; then
+            ${RMDIR} "${PATHC}no"
+          fi
+        fi
+
+        echo ${URL}
+        exit
+    fi
+
     if [ 'blog.livedoor.jp' = "${HOSTNAME}" ]; then
         # http://blog.livedoor.jp/pinkelech/archives/25313738.html
         if [ 'archives' = "${PATHB}" ]; then
