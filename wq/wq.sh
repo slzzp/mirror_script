@@ -142,24 +142,42 @@ while [ ! -z "$1" ]; do
             exit
         fi
 
-        if [ ! -d "$1" ]; then
-            ${MKDIR} "$1"
+        DESTDIR=`echo -n "$1"`
 
-            if [ ! -d "$1" ]; then
+        # convert url dir
+        CHECKHTTP=`echo $1 | ${CUT} -c 1-7`
+        if [ 'http://' = "${CHECKHTTP}" -o 'https:/' = "${CHECKHTTP}" ]; then
+            . ~/work/mirror_script/parse_url.sh "${DESTDIR}"
+
+            # https://twitter.com/kagitari/status/791152666806198272 -> twitter_kagitari_791152666806198272
+            if [ 'twitter.com' = "${HOSTNAME}" ]; then
+                DESTDIR="twitter_${PATHA}_${FILENAME}"
+            fi
+
+            # http://photo.beautyleg.com/album/70-No1fVl/0000.jpg -> 70-No1fVl
+            if [ 'photo.beautyleg.com' = "${HOSTNAME}" ]; then
+                DESTDIR="${PATHB}"
+            fi
+        fi
+
+        if [ ! -d "${DESTDIR}" ]; then
+            ${MKDIR} "${DESTDIR}"
+
+            if [ ! -d "${DESTDIR}" ]; then
                 echo "ERROR: mkdir fail"
                 exit
             fi
 
-            echo "MKDIR $1"
+            echo "MKDIR ${DESTDIR}"
         else
-            echo "EXIST $1"
+            echo "EXIST ${DESTDIR}"
         fi
 
-        if [ -d "$1" ]; then
+        if [ -d "${DESTDIR}" ]; then
             MKDIR_FIRST=1
-            cd "$1"
+            cd "${DESTDIR}"
 
-            echo "CD $1"
+            echo "CD ${DESTDIR}"
         fi
 
         shift
