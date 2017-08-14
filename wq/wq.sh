@@ -228,6 +228,14 @@ while [ ! -z "$1" ]; do
     #   get pic: http://http://ppt.cc/4Uu-@.jpg (maybe [jJ][Pp][Gg] [Gg][Ii][Ff] [Pp][Nn][Gg])
     #   check pic url from http://ppt.cc/4Uu- content ?
 
+    # TODO: gifspace.net page
+    # if url: http://gifspace.net/image/atgQc
+    #   get pic: http://gifspace.net/image/atgQc.gif
+
+    # TODO: giphy.com page
+    # if url: https://giphy.com/gifs/l4FGDTpSelVaeGwms
+    #   get pic: https://media.giphy.com/media/l4FGDTpSelVaeGwms/giphy.gif
+
 
     #################################################################
     # TYPE: url is pic, need referer link                           #
@@ -323,7 +331,9 @@ while [ ! -z "$1" ]; do
 
     # giphy pic
     # if url: https://media.giphy.com/media/3o7rbUin16uyk59yec/giphy.gif
+    #         https://media.giphy.com/media/SAu2kaYxe3KDK/giphy.mp4
     #   save file into 3o7rbUin16uyk59yec_giphy.gif
+    #                  SAu2kaYxe3KDK_giphy.mp4
     if [ 'media.giphy.com' = "${HOSTNAME}" -a 'media' = "${PATHA}" -a 'giphy.gif' = "${FILENAME}" ]; then
         wq_get_filename "${PATHB}_${FILENAME}"
 
@@ -372,6 +382,18 @@ while [ ! -z "$1" ]; do
         wq_get_filename "miupix_${PATHA}_${PATHB}.jpg"
 
         SET_OUTFILE="-O ${USE_OUTFILE}"
+        CLEAN_OUTFILE=1
+    fi
+
+    # TODO: pchome pic
+    # if url: http://a.ecimg.tw/pic/v1/data/item/201312/D/E/A/J/0/Z/DEAJ0Z-A81908181000_52aac5d90bfce
+    #                           a   b  c    d    e      f g h i j k
+    #   save file into DEAJ0Z-A81908181000_52aac5d90bfce.jpg
+    if [ 'ecimg' = "${HOSTNAMEB}" -a 'tw' = "${HOSTNAMEC}" -a 'pic' = "${PATHA}" -a 'data' = "${PATHC}" -a 'item' = "${PATHD}" ]; then
+        wq_get_filename "${FILENAME}"
+
+        SET_OUTFILE="-O ${USE_OUTFILE}"
+        CHECK_FILETYPE=1
         CLEAN_OUTFILE=1
     fi
 
