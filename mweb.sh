@@ -51,7 +51,7 @@ while [ ! -z "$1" ]; do
     fi
 
     # parse url
-    . ~/work/mirror_script/wq/parse_url.sh "${URL}"
+    . ~/work/mirror_script/parse_url.sh "${URL}"
 
 
     # check url

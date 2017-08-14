@@ -76,7 +76,7 @@ while [ ! -z "$1" ]; do
 
 
     # parse url
-    . ~/work/mirror_script/wq/parse_url.sh "${URL}"
+    . ~/work/mirror_script/parse_url.sh "${URL}"
 
 
     # pixiv: get pixture with faked referer
