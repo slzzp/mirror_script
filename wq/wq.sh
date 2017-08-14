@@ -65,7 +65,7 @@ wq_string_has_char() {
 # -nv: basic option for simple message
 # -4: some site has ipv6 address, but no route of ipv6, so force using ipv4 only
 # --no-check-certificate: do not check ssl/cert for https:// url
-WGET_BASE_OPTION="-nv -4 --no-check-certificate"
+WGET_BASE_OPTION="-nv -4 --no-check-certificate "
 
 # USE_USER_AGENT="Wget/1.12"  # default
 USE_USER_AGENT="Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-TW; rv:1.9.2.24) Gecko/20111103 Firefox/3.6.24 (.NET CLR 3.5.30729)"  # pretend windows browsers
