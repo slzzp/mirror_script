@@ -63,11 +63,19 @@ FILENAMEARG=`${BASENAME} "${PARSEURL}"`
 FILENAME=`echo "${FILENAMEARG}" | ${AWK} -F? '{printf("%s",$1);}'`
 FILENAMEEXT=`echo "${FILENAME}" | ${AWK} -F. '{printf("%s", $NF);}'`
 
+if [ "${FILENAME}" = "${FILENAMEEXT}" ]; then
+  FILENAMEEXT=''
+fi
+
 FILENAMELEN=${#FILENAME}
 FILENAMEEXTLEN=${#FILENAMEEXT}
 FILENAMEMAINLEN=`${EXPR} ${FILENAMELEN} - ${FILENAMEEXTLEN} - 1`
 
-FILENAMEMAIN=`echo "${FILENAME}" | ${CUT} -c 1-${FILENAMEMAINLEN}`
+if [ ${FILENAMEEXTLEN} -gt 0 ]; then
+  FILENAMEMAIN=`echo "${FILENAME}" | ${CUT} -c 1-${FILENAMEMAINLEN}`
+else
+  FILENAMEMAIN=`echo -n "${FILENAME}"`
+fi
 
 FILENAMEMAINFBA=`echo "${FILENAMEMAIN}" | ${AWK} -F_ '{printf("%s",$1);}'`
 FILENAMEMAINFBB=`echo "${FILENAMEMAIN}" | ${AWK} -F_ '{printf("%s",$2);}'`
