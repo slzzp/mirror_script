@@ -13,6 +13,7 @@ CURL="/usr/bin/curl"
 CUT="/usr/bin/cut"
 DATE="/bin/date"
 EXPR="/usr/bin/expr"
+FILE="/usr/bin/file"
 GREP="/bin/grep"
 LS="/bin/ls"
 MKDIR="/bin/mkdir"
@@ -96,6 +97,9 @@ CLEAN_REFERER=1
 
 # outfile default none
 CLEAN_OUTFILE=1
+
+# check file type and rename
+CHECK_FILETYPE=0
 
 # check if do mkdir first
 MKDIR_FIRST=0
@@ -440,6 +444,36 @@ while [ ! -z "$1" ]; do
     # if filesize is 0, remove it
     if [ ! -z "${USE_OUTFILE}" -a -f "${USE_OUTFILE}" -a ! -s "${USE_OUTFILE}" ]; then
         ${RM} "${USE_OUTFILE}"
+    fi
+
+
+    #################################################################
+    # TYPE: check file type and rename it                           #
+    #################################################################
+    if [ ${CHECK_FILETYPE} -gt 0 -a -e "${USE_OUTFILE}" ]; then
+        CHECK_OUTFILE=`${FILE} ${USE_OUTFILE}`
+        FILETYPE=`echo "${CHECK_OUTFILE}" | ${AWK} '{printf("%s",$2);}'`
+        # filename: GIF image data, version 89a, 360 x 504
+        # filename: JPEG image data, JFIF standard 1.01
+        # filename: PNG image data, 569 x 790, 8-bit/color RGBA, non-interlaced
+
+        NEW_OUTFILE=''
+
+        if [ 'GIF' = "${FILETYPE}" ]; then
+          wq_get_new_filename "${USE_OUTFILE}" 'gif'
+        fi
+
+        if [ 'JPEG' = "${FILETYPE}" ]; then
+          wq_get_new_filename "${USE_OUTFILE}" 'jpg'
+        fi
+
+        if [ 'PNG' = "${FILETYPE}" ]; then
+          wq_get_new_filename "${USE_OUTFILE}" 'png'
+        fi
+
+        if [ '' != "${NEW_OUTFILE}" ]; then
+            echo ${MV} "${USE_OUTFILE}" "${NEW_OUTFILE}"
+        fi
     fi
 
 
