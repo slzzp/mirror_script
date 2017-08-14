@@ -457,13 +457,16 @@ while [ ! -z "$1" ]; do
         TMP_DIRNAME=tmp_`${DATE} "+%s"`
 
         if [ ${TMP_FILECOUNT} -gt 0 ]; then
+            echo "Bulid tmpdir: ${TMP_DIRNAME}"
+
             ${MKDIR} -p ${TMP_DIRNAME}
             cd ${TMP_DIRNAME}
         fi
 
-        ${CURL} -O "${URL}"
+        ${CURL} --insecure --retry 10 -O "${URL}"
 
         if [ ${TMP_FILECOUNT} -gt 0 ]; then
+            ${MV} -in * ../
             cd ..
 
             ~/work/mirror_script/wq/rmdirdup.sh ${TMP_DIRNAME}
