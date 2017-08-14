@@ -46,6 +46,27 @@ wq_get_filename() {
     fi
 }
 
+wq_get_new_filename() {
+    if [ ! -z "$1" -a ! -z "$2" ]; then
+        CHECK_COUNT=1
+        NEW_OUTFILE=`echo -n "$1"`
+        while [ ! -z "${NEW_OUTFILE}" ]; do
+            if [ ! -f "${NEW_OUTFILE}" ]; then
+                break
+            fi
+
+            # file exist but file size is 0, rm it
+            if [ ! -s "${NEW_OUTFILE}" ]; then
+                ${RM} "${NEW_OUTFILE}"
+                break
+            fi
+
+            NEW_OUTFILE=`echo -n "$1.${CHECK_COUNT}"`
+            CHECK_COUNT=`${EXPR} ${CHECK_COUNT} + 1`
+        done
+    fi
+}
+
 wq_string_has_char() {
     # $1 = string
     # $2 = char
