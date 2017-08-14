@@ -577,10 +577,10 @@ while [ ! -z "$1" ]; do
     fi
 
     # TODO: twimg pic
-    # if url: http://pbs.twimg.com/media/CRwQEeDUcAAR_Hd.jpg
-    #   get http://pbs.twimg.com/media/CRwQEeDUcAAR_Hd.jpg:orig
-    #   compare CRwQEeDUcAAR_Hd.jpg and CRwQEeDUcAAR_Hd.jpg:large
-    #   if same, remove CRwQEeDUcAAR_Hd.jpg:orig else remove CRwQEeDUcAAR_Hd.jpg
+    # if url: https://pbs.twimg.com/media/Cmcj2dRUkAA7udp.jpg
+    #   get https://pbs.twimg.com/media/Cmcj2dRUkAA7udp.jpg:orig
+    #   compare Cmcj2dRUkAA7udp.jpg and Cmcj2dRUkAA7udp.jpg:large
+    #   if same, remove Cmcj2dRUkAA7udp.jpg:orig else remove Cmcj2dRUkAA7udp.jpg
 
     shift
 done
