@@ -11,6 +11,8 @@ AWK="/usr/bin/awk"
 CUT="/usr/bin/cut"
 EXPR="/usr/bin/expr"
 GREP="/bin/grep"
+MKDIR="/bin/mkdir"
+RMDIR="/bin/rmdir"
 TR="/usr/bin/tr"
 WC="/usr/bin/wc"
 
@@ -123,11 +125,15 @@ while [ ! -z "$1" ]; do
     fi
 
     # if http://www.huanjue.net/show.php?aid=4082&page=73
-    # call wq -d huanjue_4627 'https://shengyijun.net/huanjue/5/4082/[001-074].jpg'
+    # call wq -d 4627 'https://shengyijun.net/huanjue/5/4082/[001-074].jpg'
+    #                 'https://shengyijun.cc/huanjue/5/4082/[001-074].jpg'
     # notice: N000 rule
     # if http://www.huanjue.net/show.php?aid=4000&page=47
-    # call wq -d huanjue_4000 'https://shengyijun.net/huanjue/4/4000/[001-048].jpg'
+    # call wq -d 4000 'https://shengyijun.net/huanjue/4/4000/[001-048].jpg'
     if [ 'www.huanjue.net' = "${HOSTNAME}" -a 'show.php' = "${FILENAME}" ]; then
+        ${MKDIR} -p ~/tmp/stockings/huanjue.net
+        cd ~/tmp/stockings/huanjue.net
+
         if [ 'aid' = "${ARGAN}" -a 'page' = "${ARGBN}" ]; then
             if [ 0 -eq `${EXPR} ${ARGAV} % 1000` ]; then
                 HUANJUEINDEX=`${EXPR} ${ARGAV} / 1000`
@@ -136,9 +142,15 @@ while [ ! -z "$1" ]; do
             fi
 
             WQURL="https://shengyijun.net/huanjue/${HUANJUEINDEX}/${ARGAV}/[001-`${EXPR} ${ARGBV} + 1`].jpg"
+#            WQURL="https://shengyijun.cc/huanjue/${HUANJUEINDEX}/${ARGAV}/[001-`${EXPR} ${ARGBV} + 1`].jpg"
 
-            cd ~/tmp/stockings
-            ~/work/mirror_script/wq/wq.sh -d "huanjue_${ARGAV}" ${WQURL}
+            if [ ! -d "${ARGAV}" ]; then
+              ~/work/mirror_script/wq/wq.sh -d "${ARGAV}" ${WQURL}
+
+              if [ -d "${ARGAV}no" ]; then
+                ${RMDIR} "${ARGAV}no"
+              fi
+            fi
         fi
 
         if [ 'aid' = "${ARGBN}" -a 'page' = "${ARGAN}" ]; then
@@ -149,9 +161,15 @@ while [ ! -z "$1" ]; do
             fi
 
             WQURL="https://shengyijun.net/huanjue/${HUANJUEINDEX}/${ARGBV}/[001-`${EXPR} ${ARGAV} + 1`].jpg"
+#            WQURL="https://shengyijun.cc/huanjue/${HUANJUEINDEX}/${ARGBV}/[001-`${EXPR} ${ARGAV} + 1`].jpg"
 
-            cd ~/tmp/stockings
-            ~/work/mirror_script/wq/wq.sh -d "huanjue_${ARGAV}" ${WQURL}
+            if [ ! -d "${ARGBV}" ]; then
+              ~/work/mirror_script/wq/wq.sh -d "${ARGBV}" ${WQURL}
+
+              if [ -d "${ARGBV}no" ]; then
+                ${RMDIR} "${ARGBV}no"
+              fi
+            fi
         fi
 
         echo ${URL}
