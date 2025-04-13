@@ -7,23 +7,7 @@ fi
 
 
 # external commands
-AWK="/usr/bin/awk"
-BASENAME="/usr/bin/basename"
-CURL="/usr/bin/curl"
-CUT="/usr/bin/cut"
-DATE="/bin/date"
-EXPR="/usr/bin/expr"
-FILE="/usr/bin/file"
-GREP="/bin/grep"
-LS="/bin/ls"
-MKDIR="/bin/mkdir"
-MV="/bin/mv"
-RM="/bin/rm"
-RMDIR="/bin/rmdir"
-SED="/bin/sed"
-TR="/usr/bin/tr"
-WC="/usr/bin/wc"
-WGET="/usr/bin/wget"
+. ~/work/mirror_script/cmd.sh
 
 
 wq_get_filename() {
