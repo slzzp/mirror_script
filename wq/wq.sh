@@ -279,6 +279,16 @@ while [ ! -z "$1" ]; do
     # if url: https://dki5ev61kmqpi.cloudfront.net/da02022e02b68ca890a343d6f636f21c3dc34516/687474703a2f2f692e696d6775722e636f6d2f3953716c4167712e6a7067
     #   save file into da02022e02b68ca890a343d6f636f21c3dc34516_687474703a2f2f692e696d6775722e636f6d2f3953716c4167712e6a7067.jpg(.N)
 
+    # twitter / x banner pic
+    # if url: https://pbs.twimg.com/profile_banners/2935975597/1705805388/1500x500
+    #  save file into 2935975597_1705805388_1500x500.jpg
+    if [ 'pbs.twimg.com' = "${HOSTNAME}" -a 'profile_banners' = "${PATHA}" ]; then
+        wq_get_filename "${PATHB}_${PATHC}_${FILENAME}.jpg"
+
+        SET_OUTFILE="-O ${USE_OUTFILE}"
+        CLEAN_OUTFILE=1
+    fi
+
     # twitter / x pic
     # if url: https://pbs.twimg.com/media/Gmpvz9Ga0AAr81E?format=jpg&name=large
     #  save file into Gmpvz9Ga0AAr81E_large.jpg
