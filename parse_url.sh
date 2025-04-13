@@ -10,12 +10,7 @@ DEBUGMSG=0
 
 
 # external commands
-AWK="/usr/bin/awk"
-BASENAME="/usr/bin/basename"
-CUT="/usr/bin/cut"
-EXPR="/usr/bin/expr"
-SED="/bin/sed"
-
+. ~/work/mirror_script/cmd.sh
 
 # preprocess url
 URL=`echo -n "$1"`
