@@ -145,7 +145,7 @@ while [ ! -z "$1" ]; do
         fi
 
         if [ ! -d "${DESTDIR}" ]; then
-            ${MKDIR} "${DESTDIR}"
+            ${MKDIR} -p "${DESTDIR}"
 
             if [ ! -d "${DESTDIR}" ]; then
                 ${ECHO} "ERROR: mkdir fail"
