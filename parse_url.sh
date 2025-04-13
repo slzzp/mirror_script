@@ -90,6 +90,42 @@ ARGC=`${ECHO} "${ARGS}" | ${AWK} -F\& '{printf("%s",$3);}'`
 ARGCN=`${ECHO} "${ARGC}" | ${AWK} -F= '{printf("%s",$1);}'`
 ARGCV=`${ECHO} "${ARGC}" | ${AWK} -F= '{printf("%s",$2);}'`
 
+ARGD=`${ECHO} "${ARGS}" | ${AWK} -F\& '{printf("%s",$4);}'`
+ARGDN=`${ECHO} "${ARGD}" | ${AWK} -F= '{printf("%s",$1);}'`
+ARGDV=`${ECHO} "${ARGD}" | ${AWK} -F= '{printf("%s",$2);}'`
+
+ARGE=`${ECHO} "${ARGS}" | ${AWK} -F\& '{printf("%s",$5);}'`
+ARGEN=`${ECHO} "${ARGE}" | ${AWK} -F= '{printf("%s",$1);}'`
+ARGEV=`${ECHO} "${ARGE}" | ${AWK} -F= '{printf("%s",$2);}'`
+
+ARGF=`${ECHO} "${ARGS}" | ${AWK} -F\& '{printf("%s",$6);}'`
+ARGFN=`${ECHO} "${ARGF}" | ${AWK} -F= '{printf("%s",$1);}'`
+ARGFV=`${ECHO} "${ARGF}" | ${AWK} -F= '{printf("%s",$2);}'`
+
+ARGG=`${ECHO} "${ARGS}" | ${AWK} -F\& '{printf("%s",$7);}'`
+ARGGN=`${ECHO} "${ARGG}" | ${AWK} -F= '{printf("%s",$1);}'`
+ARGGV=`${ECHO} "${ARGG}" | ${AWK} -F= '{printf("%s",$2);}'`
+
+ARGH=`${ECHO} "${ARGS}" | ${AWK} -F\& '{printf("%s",$8);}'`
+ARGHN=`${ECHO} "${ARGH}" | ${AWK} -F= '{printf("%s",$1);}'`
+ARGHV=`${ECHO} "${ARGH}" | ${AWK} -F= '{printf("%s",$2);}'`
+
+ARGI=`${ECHO} "${ARGS}" | ${AWK} -F\& '{printf("%s",$9);}'`
+ARGIN=`${ECHO} "${ARGI}" | ${AWK} -F= '{printf("%s",$1);}'`
+ARGIV=`${ECHO} "${ARGI}" | ${AWK} -F= '{printf("%s",$2);}'`
+
+ARGJ=`${ECHO} "${ARGS}" | ${AWK} -F\& '{printf("%s",$10);}'`
+ARGJN=`${ECHO} "${ARGJ}" | ${AWK} -F= '{printf("%s",$1);}'`
+ARGJV=`${ECHO} "${ARGJ}" | ${AWK} -F= '{printf("%s",$2);}'`
+
+ARGK=`${ECHO} "${ARGS}" | ${AWK} -F\& '{printf("%s",$11);}'`
+ARGKN=`${ECHO} "${ARGK}" | ${AWK} -F= '{printf("%s",$1);}'`
+ARGKV=`${ECHO} "${ARGK}" | ${AWK} -F= '{printf("%s",$2);}'`
+
+ARGL=`${ECHO} "${ARGS}" | ${AWK} -F\& '{printf("%s",$12);}'`
+ARGLN=`${ECHO} "${ARGL}" | ${AWK} -F= '{printf("%s",$1);}'`
+ARGLV=`${ECHO} "${ARGL}" | ${AWK} -F= '{printf("%s",$2);}'`
+
 
 # debug output
 if [ ${DEBUGMSG} -gt 0 ]; then
@@ -136,4 +172,31 @@ if [ ${DEBUGMSG} -gt 0 ]; then
     ${ECHO} "ARGC='${ARGC}'"
     ${ECHO} "ARGCN='${ARGCN}'"
     ${ECHO} "ARGCV='${ARGCV}'"
+    ${ECHO} "ARGD='${ARGD}'"
+    ${ECHO} "ARGDN='${ARGDN}'"
+    ${ECHO} "ARGDV='${ARGDV}'"
+    ${ECHO} "ARGE='${ARGE}'"
+    ${ECHO} "ARGEN='${ARGEN}'"
+    ${ECHO} "ARGEV='${ARGEV}'"
+    ${ECHO} "ARGF='${ARGF}'"
+    ${ECHO} "ARGFN='${ARGFN}'"
+    ${ECHO} "ARGFV='${ARGFV}'"
+    ${ECHO} "ARGG='${ARGG}'"
+    ${ECHO} "ARGGN='${ARGGN}'"
+    ${ECHO} "ARGGV='${ARGGV}'"
+    ${ECHO} "ARGH='${ARGH}'"
+    ${ECHO} "ARGHN='${ARGHN}'"
+    ${ECHO} "ARGHV='${ARGHV}'"
+    ${ECHO} "ARGI='${ARGI}'"
+    ${ECHO} "ARGIN='${ARGIN}'"
+    ${ECHO} "ARGIV='${ARGIV}'"
+    ${ECHO} "ARGJ='${ARGJ}'"
+    ${ECHO} "ARGJN='${ARGJN}'"
+    ${ECHO} "ARGJV='${ARGJV}'"
+    ${ECHO} "ARGK='${ARGK}'"
+    ${ECHO} "ARGKN='${ARGKN}'"
+    ${ECHO} "ARGKV='${ARGKV}'"
+    ${ECHO} "ARGL='${ARGL}'"
+    ${ECHO} "ARGLN='${ARGLN}'"
+    ${ECHO} "ARGLV='${ARGLV}'"
 fi
