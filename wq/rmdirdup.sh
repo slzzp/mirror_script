@@ -1,16 +1,7 @@
 #!/bin/sh
 
 # external commands
-AWK="/usr/bin/awk"
-BASENAME="/usr/bin/basename"
-CUT="/usr/bin/cut"
-FIND="/usr/bin/find"
-LS="/bin/ls"
-MD5="/usr/bin/md5sum"
-RM="/bin/rm"
-SED="/bin/sed"
-TR="/usr/bin/tr"
-WC="/usr/bin/wc"
+. ~/work/mirror_script/cmd.sh
 
 
 if [ -z "$1" -o "." = "$1" -o "./" = "$1" ]; then
