@@ -1,14 +1,7 @@
 #!/bin/sh
 
 # external commands
-AWK="/usr/bin/awk"
-BASENAME="/usr/bin/basename"
-CUT="/usr/bin/cut"
-LS="/bin/ls"
-MD5="/usr/bin/md5sum"
-RM="/bin/rm"
-TR="/usr/bin/tr"
-WC="/usr/bin/wc"
+. ~/work/mirror_script/cmd.sh
 
 for I in 9 8 7 6 5 4 3 2 1; do
     FILECOUNT=`${LS} *.${I} | ${WC} -l | ${TR} -d ' '`
