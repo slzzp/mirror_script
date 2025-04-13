@@ -133,9 +133,22 @@ while [ ! -z "$1" ]; do
         if [ 'http://' = "${CHECKHTTP}" -o 'https:/' = "${CHECKHTTP}" ]; then
             . ~/work/mirror_script/parse_url.sh "${DESTDIR}"
 
-            # https://twitter.com/kagitari/status/791152666806198272 -> twitter_kagitari_791152666806198272
-            if [ 'twitter.com' = "${HOSTNAME}" ]; then
-                DESTDIR="twitter_${PATHA}_${FILENAME}"
+            # twitter / x dir
+            # single pic: https://x.com/icecream0813/status/1903590012941115583/photo/1
+            # banner pic: https://x.com/icecream0813/header_photo
+            # -> twitter/icecream0813
+            # multiple pics: https://twitter.com/kagitari/status/791152666806198272
+            # -> twitter/kagitari/791152666806198272
+            if [ 'twitter.com' = "${HOSTNAME}" -o 'x.com' = "${HOSTNAME}" ]; then
+                if [ 'header_photo' = "${PATHB}" ]; then
+                    DESTDIR="twitter/${PATHA}"
+                elif [ 'status' = "${PATHB}" ]; then
+                    if [ 'photo' = "${PATHD}" ]; then
+                        DESTDIR="twitter/${PATHA}"
+                    else
+                        DESTDIR="twitter/${PATHA}/${FILENAME}"
+                    fi
+                fi
             fi
 
             # http://photo.beautyleg.com/album/70-No1fVl/0000.jpg -> 70-No1fVl
