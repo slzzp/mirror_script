@@ -587,5 +587,5 @@ if [ ${MKDIR_FIRST} -gt 0 ]; then
         ~/work/mirror_script/wq/rmdirdup.sh ../../../ad9/
     fi
 
-    ${ECHO} "file count: `${LS} | ${WC} -l`"
+    ${ECHO} "file count: `${LS} | ${WC} -l | ${TR} -d ' '`"
 fi
