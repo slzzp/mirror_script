@@ -13,7 +13,7 @@ fi
 wq_get_filename() {
     if [ ! -z "$1" ]; then
         CHECK_COUNT=1
-        USE_OUTFILE=`echo -n "$1"`
+        USE_OUTFILE=`${ECHO} -n "$1"`
         while [ ! -z "${USE_OUTFILE}" ]; do
             if [ ! -f "${USE_OUTFILE}" ]; then
                 break
@@ -25,7 +25,7 @@ wq_get_filename() {
                 break
             fi
 
-            USE_OUTFILE=`echo -n "$1.${CHECK_COUNT}"`
+            USE_OUTFILE=`${ECHO} -n "$1.${CHECK_COUNT}"`
             CHECK_COUNT=`${EXPR} ${CHECK_COUNT} + 1`
         done
     fi
@@ -34,7 +34,7 @@ wq_get_filename() {
 wq_get_new_filename() {
     if [ ! -z "$1" -a ! -z "$2" ]; then
         CHECK_COUNT=1
-        NEW_OUTFILE=`echo -n "$1"`
+        NEW_OUTFILE=`${ECHO} -n "$1"`
         while [ ! -z "${NEW_OUTFILE}" ]; do
             if [ ! -f "${NEW_OUTFILE}" ]; then
                 break
@@ -46,7 +46,7 @@ wq_get_new_filename() {
                 break
             fi
 
-            NEW_OUTFILE=`echo -n "$1.${CHECK_COUNT}"`
+            NEW_OUTFILE=`${ECHO} -n "$1.${CHECK_COUNT}"`
             CHECK_COUNT=`${EXPR} ${CHECK_COUNT} + 1`
         done
     fi
@@ -59,7 +59,7 @@ wq_string_has_char() {
         return 0
     fi
 
-    CHECK_CHAR=`echo "$1" | ${GREP} "$2" | ${WC} -l | ${TR} -d ' '`
+    CHECK_CHAR=`${ECHO} "$1" | ${GREP} "$2" | ${WC} -l | ${TR} -d ' '`
     if [ ${CHECK_CHAR} -gt 0 ]; then
         return 1
     fi
@@ -109,7 +109,7 @@ while [ ! -z "$1" ]; do
     fi
 
     # check referer
-    CHECK_REFERER=`echo "$1" | ${CUT} -c 1-10`
+    CHECK_REFERER=`${ECHO} "$1" | ${CUT} -c 1-10`
     if [ '--referer=' = "${CHECK_REFERER}" ]; then
         SET_REFERER="$1"
         shift
@@ -122,14 +122,14 @@ while [ ! -z "$1" ]; do
         shift
 
         if [ -z "$1" ]; then
-            echo "ERROR: empty dir"
+            ${ECHO} "ERROR: empty dir"
             exit
         fi
 
-        DESTDIR=`echo -n "$1"`
+        DESTDIR=`${ECHO} -n "$1"`
 
         # convert url dir
-        CHECKHTTP=`echo $1 | ${CUT} -c 1-7`
+        CHECKHTTP=`${ECHO} $1 | ${CUT} -c 1-7`
         if [ 'http://' = "${CHECKHTTP}" -o 'https:/' = "${CHECKHTTP}" ]; then
             . ~/work/mirror_script/parse_url.sh "${DESTDIR}"
 
@@ -148,20 +148,20 @@ while [ ! -z "$1" ]; do
             ${MKDIR} "${DESTDIR}"
 
             if [ ! -d "${DESTDIR}" ]; then
-                echo "ERROR: mkdir fail"
+                ${ECHO} "ERROR: mkdir fail"
                 exit
             fi
 
-            echo "MKDIR ${DESTDIR}"
+            ${ECHO} "MKDIR ${DESTDIR}"
         else
-            echo "EXIST ${DESTDIR}"
+            ${ECHO} "EXIST ${DESTDIR}"
         fi
 
         if [ -d "${DESTDIR}" ]; then
             MKDIR_FIRST=1
             cd "${DESTDIR}"
 
-            echo "CD ${DESTDIR}"
+            ${ECHO} "CD ${DESTDIR}"
         fi
 
         shift
@@ -185,12 +185,12 @@ while [ ! -z "$1" ]; do
 
 
     # preprocess url
-    URL=`echo -n "$1"`
+    URL=`${ECHO} -n "$1"`
 
     # check if $1's prefix is '//'
-    CHECKSLASHSLASH=`echo "$1" | ${CUT} -c 1-2`
+    CHECKSLASHSLASH=`${ECHO} "$1" | ${CUT} -c 1-2`
     if [ "//" = "${CHECKSLASHSLASH}" ]; then
-        URL=`echo -n "http:$1"`
+        URL=`${ECHO} -n "http:$1"`
     fi
 
 
@@ -239,7 +239,7 @@ while [ ! -z "$1" ]; do
     if [ 'ppt.cc' = "${HOSTNAME}" ]; then
         wq_string_has_char "${URL}" '@'
         if [ "$?" -gt 0 ]; then
-            TMP_REFERER=`echo "${URL}" | ${AWK} -F@ '{printf("%s",$1);}'`
+            TMP_REFERER=`${ECHO} "${URL}" | ${AWK} -F@ '{printf("%s",$1);}'`
 
             SET_REFERER="--referer=${TMP_REFERER}"
             CLEAN_REFERER=1
@@ -259,11 +259,11 @@ while [ ! -z "$1" ]; do
     #   set referer to http://www.pixiv.net/member_illust.php?mode=big&illust_id=10931186
     if [ 'pixiv' = "${HOSTNAMEB}" -a 'net' = "${HOSTNAMEC}" ]; then
         # FIXME: get filename from parse_url variables
-        FILEID=`echo "${FILENAME}" | ${AWK} -F. '{printf("%d",$1);}'`
+        FILEID=`${ECHO} "${FILENAME}" | ${AWK} -F. '{printf("%d",$1);}'`
 
         # if url has ? , remove all after ?
         if [ ! -z "${ARGS}" ]; then
-            URL=`echo "${URL}" | ${AWK} -F? '{printf("%s",$1);}'`
+            URL=`${ECHO} "${URL}" | ${AWK} -F? '{printf("%s",$1);}'`
         fi
 
         SET_REFERER="--referer=http://www.pixiv.net/member_illust.php?mode=big&illust_id=${FILEID}"
@@ -418,9 +418,9 @@ while [ ! -z "$1" ]; do
     # if url: https://fbcdn-sphotos-e-a.akamaihd.net/hphotos-ak-xpa1/t31.0-8/s960x960/10514307_1450320061902023_7392152021835748963_o.jpg
     #         https://scontent-b-nrt.xx.fbcdn.net/hphotos-xpa1/t1.0-9/p240x240/10313489_415628195241707_2675330737228852867_n.jpg
     #   replace url: https://fbcdn-sphotos-e-a.akamaihd.net/hphotos-ak-xpa1/t31.0-8/10514307_1450320061902023_7392152021835748963_o.jpg
-    CHECKFBS=`echo "${URL}" | ${GREP} '/[ps][0-9][0-9]*x[0-9][0-9]*/' | ${WC} -l | ${TR} -d ' '`
+    CHECKFBS=`${ECHO} "${URL}" | ${GREP} '/[ps][0-9][0-9]*x[0-9][0-9]*/' | ${WC} -l | ${TR} -d ' '`
     if [ ${CHECKFBS} -gt 0 ]; then
-        URL=`echo -n "${URL}" | ${SED} 's/\/[ps][0-9][0-9]*x[0-9][0-9]*\//\//g'`
+        URL=`${ECHO} -n "${URL}" | ${SED} 's/\/[ps][0-9][0-9]*x[0-9][0-9]*\//\//g'`
     fi
 
     # TODO: taiwanacgn.net pic
@@ -433,7 +433,7 @@ while [ ! -z "$1" ]; do
 
 
     # check if using curl
-    USE_CURL=`echo "${URL}" | ${GREP} -P "\[[0-9]+-[0-9]+\]" | ${WC} -l | ${TR} -d ' '`
+    USE_CURL=`${ECHO} "${URL}" | ${GREP} -P "\[[0-9]+-[0-9]+\]" | ${WC} -l | ${TR} -d ' '`
 
     # get file first
     if [ ${USE_CURL} -gt 0 ]; then
@@ -441,7 +441,7 @@ while [ ! -z "$1" ]; do
         TMP_DIRNAME=tmp_`${DATE} "+%s"`
 
         if [ ${TMP_FILECOUNT} -gt 0 ]; then
-            echo "Bulid tmpdir: ${TMP_DIRNAME}"
+            ${ECHO} "Bulid tmpdir: ${TMP_DIRNAME}"
 
             ${MKDIR} -p ${TMP_DIRNAME}
             cd ${TMP_DIRNAME}
@@ -458,7 +458,7 @@ while [ ! -z "$1" ]; do
             ${RMDIR} ${TMP_DIRNAME}
 
             if [ -d "${TMP_DIRNAME}" ]; then
-                echo "!! DIFF !! DIFF !! DIFF !! DIFF !! DIFF !! DIFF !! DIFF !!"
+                ${ECHO} "!! DIFF !! DIFF !! DIFF !! DIFF !! DIFF !! DIFF !! DIFF !!"
             fi
         fi
 
@@ -479,7 +479,7 @@ while [ ! -z "$1" ]; do
     #################################################################
     if [ ${CHECK_FILETYPE} -gt 0 -a -e "${USE_OUTFILE}" ]; then
         CHECK_OUTFILE=`${FILE} ${USE_OUTFILE}`
-        FILETYPE=`echo "${CHECK_OUTFILE}" | ${AWK} '{printf("%s",$2);}'`
+        FILETYPE=`${ECHO} "${CHECK_OUTFILE}" | ${AWK} '{printf("%s",$2);}'`
         # filename: GIF image data, version 89a, 360 x 504
         # filename: JPEG image data, JFIF standard 1.01
         # filename: PNG image data, 569 x 790, 8-bit/color RGBA, non-interlaced
@@ -499,7 +499,7 @@ while [ ! -z "$1" ]; do
         fi
 
         if [ '' != "${NEW_OUTFILE}" ]; then
-            echo ${MV} "${USE_OUTFILE}" "${NEW_OUTFILE}"
+            ${ECHO} ${MV} "${USE_OUTFILE}" "${NEW_OUTFILE}"
         fi
     fi
 
@@ -524,19 +524,19 @@ while [ ! -z "$1" ]; do
         fi
 
         # check url 2
-        FILENAME_SIZE=`echo "${FILENAME}" | ${AWK} -F_ '{printf("%s",$4);}'`
+        FILENAME_SIZE=`${ECHO} "${FILENAME}" | ${AWK} -F_ '{printf("%s",$4);}'`
         if [ -z "${FILENAME_SIZE}" ]; then
             # url 3
-            FILENAME_BODY=`echo "${FILENAME}" | ${AWK} -F_ '{printf("%s_%s",$1,$2);}'`
+            FILENAME_BODY=`${ECHO} "${FILENAME}" | ${AWK} -F_ '{printf("%s_%s",$1,$2);}'`
         else
             # url 2
-            FILENAME_BODY=`echo "${FILENAME}" | ${AWK} -F_ '{printf("%s_%s_%s",$1,$2,$3);}'`
+            FILENAME_BODY=`${ECHO} "${FILENAME}" | ${AWK} -F_ '{printf("%s_%s_%s",$1,$2,$3);}'`
         fi
 
         # try get bigger size: 1280 1024 800 600
         # maybe there are more bigger size in the future
         for MORE_SIZE in 1280 1024 800 600; do
-            MORE_URL=`echo -n "${PROTOCOL}://${HOSTNAME}/${MORE_PATH}${FILENAME_BODY}_${MORE_SIZE}.${FILENAMEEXT}"`
+            MORE_URL=`${ECHO} -n "${PROTOCOL}://${HOSTNAME}/${MORE_PATH}${FILENAME_BODY}_${MORE_SIZE}.${FILENAMEEXT}"`
 
             wq_get_filename "${FILENAME_BODY}_${MORE_SIZE}.${FILENAMEEXT}"
 
@@ -549,7 +549,7 @@ while [ ! -z "$1" ]; do
             if [ ! -z "${USE_OUTFILE}" -a -f "${USE_OUTFILE}" -a ! -s "${USE_OUTFILE}" ]; then
                 ${RM} "${USE_OUTFILE}"
 
-                echo "RE-GET ${URL}"
+                ${ECHO} "RE-GET ${URL}"
                 continue
             fi
 
@@ -583,5 +583,5 @@ if [ ${MKDIR_FIRST} -gt 0 ]; then
         ~/work/mirror_script/wq/rmdirdup.sh ../../../ad9/
     fi
 
-    echo "file count: `${LS} | ${WC} -l`"
+    ${ECHO} "file count: `${LS} | ${WC} -l`"
 fi
