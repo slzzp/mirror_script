@@ -358,6 +358,19 @@ while [ ! -z "$1" ]; do
         CLEAN_OUTFILE=1
     fi
 
+    # facebook pic 12-1
+    # if url: https://scontent.ftpe7-1.fna.fbcdn.net/v/t39.30808-6/491359352_683598494026059_5586019939199564955_n.jpg?stp=cp6_dst-jpegr_tt6&_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_ohc=Tt6CRihAcgsQ7kNvwEnsmr-&_nc_oc=AdnBuN8tcQDp2KNAfflK3715T79FNoRzU7GFsmPrjR9WBMk-2WZOEzewAnymnJqVGDU&_nc_zt=23&se=-1&_nc_ht=scontent.ftpe7-1.fna&_nc_gid=m4DJPgeSD2fyy9JhyP_pVA&oh=00_AfFa0Ych8cad0F-fqYW-NgDddM8hrquzhXc5kE5J1kglzw&oe=6805CAB7
+    #  save file into 491359352_683598494026059_5586019939199564955_n.jpg
+    if [ 'stp' = "${ARGAN}" -a \
+         '_nc_cat' = "${ARGBN}" -a 'ccb' = "${ARGCN}" -a '_nc_sid' = "${ARGDN}" -a '_nc_ohc' = "${ARGEN}" -a \
+         '_nc_oc' = "${ARGFN}" -a '_nc_zt' = "${ARGGN}" -a 'se' = "${ARGHN}" -a '_nc_ht' = "${ARGIN}" -a '_nc_gid' = "${ARGJN}" -a \
+         'oh' = "${ARGKN}" -a 'oe' = "${ARGLN}" ]; then
+        wq_get_filename "${FILENAME}"
+
+        SET_OUTFILE="-O ${USE_OUTFILE}"
+        CLEAN_OUTFILE=1
+    fi
+
     # TODO: facebook safeimage
     # if url: https://external.xx.fbcdn.net/safe_image.php?d=AQA9hX2xGLwd2-S0&w=470&h=246&url=fbstaging%3A%2F%2Fgraph.facebook.com%2Fstaging_resources%2FMDExMDczNDY3NDE2MDQ0NzgzOjE5MjY1MTI5NTc%3D&cfs=1&upscale=1&sx=0&sy=51&sw=1034&sh=541
     #
