@@ -134,13 +134,17 @@ while [ ! -z "$1" ]; do
             . ~/work/mirror_script/parse_url.sh "${DESTDIR}"
 
             # twitter / x dir
+            # home dir 1: https://x.com/icecream0813
+            # home dir 2: https://x.com/icecream0813/
             # single pic: https://x.com/icecream0813/status/1903590012941115583/photo/1
             # banner pic: https://x.com/icecream0813/header_photo
             # -> twitter/icecream0813
             # multiple pics: https://twitter.com/kagitari/status/791152666806198272
             # -> twitter/kagitari/791152666806198272
             if [ 'twitter.com' = "${HOSTNAME}" -o 'x.com' = "${HOSTNAME}" ]; then
-                if [ 'header_photo' = "${PATHB}" ]; then
+                if [ "${PATHA}" = "${FILENAME}" ]; then
+                    DESTDIR="twitter/${FILENAME}"
+                elif [ 'header_photo' = "${PATHB}" ]; then
                     DESTDIR="twitter/${PATHA}"
                 elif [ 'status' = "${PATHB}" ]; then
                     if [ 'photo' = "${PATHD}" ]; then
