@@ -509,7 +509,7 @@ while [ ! -z "$1" ]; do
 
 
     # check if using curl
-    if [ "${OSNAME}" == 'linux' ]; then
+    if [ "${OSNAME}" = 'linux' ]; then
       USE_CURL=`${ECHO} "${URL}" | ${GREP} -P "\[[0-9]+-[0-9]+\]" | ${WC} -l | ${TR} -d ' '`
     else
       USE_CURL=`${ECHO} "${URL}" | ${GREP} "\[[0-9]+-[0-9]+\]" | ${WC} -l | ${TR} -d ' '`
