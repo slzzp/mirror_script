@@ -88,6 +88,9 @@ CHECK_FILETYPE=0
 # check if do mkdir first
 MKDIR_FIRST=0
 
+DESTUSER=''
+DESTDIR=''
+
 while [ ! -z "$1" ]; do
     if [ ${CLEAN_REFERER} -gt 0 ]; then
         SET_REFERER=''
@@ -116,6 +119,14 @@ while [ ! -z "$1" ]; do
         continue
     fi
 
+    # set user (for x/twitter)
+    if [ '-u' = "$1" ]; then
+        shift
+
+        DESTUSER=`${ECHO} -n "$1"`
+        shift
+        continue
+    fi
 
     # set dir
     if [ '-d' = "$1" ]; then
@@ -143,14 +154,30 @@ while [ ! -z "$1" ]; do
             # -> twitter/kagitari/791152666806198272
             if [ 'twitter.com' = "${HOSTNAME}" -o 'x.com' = "${HOSTNAME}" ]; then
                 if [ "${PATHA}" = "${FILENAME}" ]; then
-                    DESTDIR="twitter/${FILENAME}"
+                    if [ ! -z "${DESTUSER}" ]; then
+                        DESTDIR="twitter/${DESTUSER}"
+                    else
+                        DESTDIR="twitter/${FILENAME}"
+                    fi
                 elif [ 'header_photo' = "${PATHB}" ]; then
-                    DESTDIR="twitter/${PATHA}"
+                    if [ ! -z "${DESTUSER}" ]; then
+                        DESTDIR="twitter/${DESTUSER}"
+                    else
+                        DESTDIR="twitter/${PATHA}"
+                    fi
                 elif [ 'status' = "${PATHB}" ]; then
                     if [ 'photo' = "${PATHD}" ]; then
-                        DESTDIR="twitter/${PATHA}"
+                        if [ ! -z "${DESTUSER}" ]; then
+                            DESTDIR="twitter/${DESTUSER}"
+                        else
+                            DESTDIR="twitter/${PATHA}"
+                        fi
                     else
-                        DESTDIR="twitter/${PATHA}/${FILENAME}"
+                        if [ ! -z "${DESTUSER}" ]; then
+                            DESTDIR="twitter/${DESTUSER}/${FILENAME}"
+                        else
+                            DESTDIR="twitter/${PATHA}/${FILENAME}"
+                        fi
                     fi
                 fi
             fi
