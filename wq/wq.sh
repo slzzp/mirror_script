@@ -413,6 +413,18 @@ while [ ! -z "$1" ]; do
         CLEAN_OUTFILE=1
     fi
 
+    # facebook pic 11-3
+    # if url: https://scontent.ftpe7-4.fna.fbcdn.net/v/t39.30808-6/641624818_122235820886285088_853290561084051708_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=13d280&_nc_ohc=2cE3W95SM20Q7kNvwG6gc3W&_nc_oc=Adkbv08Un93DSLy6x4vm1R9SLXtZndBmM-75cHRhZyZA-0W7jCCNlFesIYChlWU5nKQ&_nc_zt=23&_nc_ht=scontent.ftpe7-4.fna&_nc_gid=MHTRx-ljFLmcPXNewngpog&_nc_ss=8&oh=00_AfsdA8w1BbeJ88VPXnDIYZmyrK9hBM4CR6ifufWnkvqUgQ&oe=69A84A5F
+    #  save file into 641624818_122235820886285088_853290561084051708_n.jpg
+    if [ '_nc_cat' = "${ARGAN}" -a 'ccb' = "${ARGBN}" -a '_nc_sid' = "${ARGCN}" -a '_nc_ohc' = "${ARGDN}" -a \
+         '_nc_oc' = "${ARGEN}" -a '_nc_zt' = "${ARGFN}" -a '_nc_ht' = "${ARGGN}" -a '_nc_gid' = "${ARGHN}" -a \
+         '_nc_ss' = "${ARGIN}" -a 'oh' = "${ARGJN}" -a 'oe' = "${ARGKN}" ]; then
+        wq_get_filename "${FILENAME}"
+
+        SET_OUTFILE="-O ${USE_OUTFILE}"
+        CLEAN_OUTFILE=1
+    fi
+
     # facebook pic 12-1
     # if url: https://scontent.ftpe7-1.fna.fbcdn.net/v/t39.30808-6/491359352_683598494026059_5586019939199564955_n.jpg?stp=cp6_dst-jpegr_tt6&_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_ohc=Tt6CRihAcgsQ7kNvwEnsmr-&_nc_oc=AdnBuN8tcQDp2KNAfflK3715T79FNoRzU7GFsmPrjR9WBMk-2WZOEzewAnymnJqVGDU&_nc_zt=23&se=-1&_nc_ht=scontent.ftpe7-1.fna&_nc_gid=m4DJPgeSD2fyy9JhyP_pVA&oh=00_AfFa0Ych8cad0F-fqYW-NgDddM8hrquzhXc5kE5J1kglzw&oe=6805CAB7
     #  save file into 491359352_683598494026059_5586019939199564955_n.jpg
