@@ -344,6 +344,16 @@ while [ ! -z "$1" ]; do
         CLEAN_OUTFILE=1
     fi
 
+    # github private image
+    # if url: https://private-user-images.githubusercontent.com/105090476/502921371-088bd19e-2077-4230-9fc0-1c04656219cf.jpg?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njc1NTA3MjcsIm5iZiI6MTc2NzU1MDQyNywicGF0aCI6Ii8xMDUwOTA0NzYvNTAyOTIxMzcxLTA4OGJkMTllLTIwNzctNDIzMC05ZmMwLTFjMDQ2NTYyMTljZi5qcGc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjYwMTA0JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI2MDEwNFQxODEzNDdaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT03YWFjYjFlYjYyMzE2YTFmMTk1YmJkZThmYjdhMTE5NDA5OTNhMDA4Y2IyMGRmMGE0NDAwMDdkN2JlZTUyM2Q0JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.bAw1PHMoSpGXeyqzi3DS34Rg8964CH3z1crgBptcj7Y
+    #    save fie into 502921371-088bd19e-2077-4230-9fc0-1c04656219cf.jpg
+    if [ 'private-user-images.githubusercontent.com' = "${HOSTNAME}" ]; then
+        wq_get_filename "${PATHA}_${FILENAME}"
+
+        SET_OUTFILE="-O ${USE_OUTFILE}"
+        CLEAN_OUTFILE=1
+    fi
+
     # facebook dl pic
     # if url: https://scontent-a-nrt.xx.fbcdn.net/hphotos-xpf1/t31.0-8/1272345_163157470544271_1358342518_o.jpg?dl=1
     #   save file into 1272345_163157470544271_1358342518_o.jpg(.N)
